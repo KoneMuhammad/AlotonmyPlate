@@ -24,9 +24,7 @@ val iconColorArray: Array<Color> = arrayOf(Color(),Color(),Color())
 @Composable
 fun aPriorityButton(){
     val priorityName: MutableState<String> = remember { mutableStateOf("") }
-    // they should all share the same keyboard state so that its only one
     val keyboardController = LocalSoftwareKeyboardController.current
-    val buttonColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFD0BCFF)) }
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     fun changeColor(): Color {
@@ -52,7 +50,3 @@ fun aPriorityButton(){
     }
 
 }
-// performance it == asm instructions so thats the key
-// read code
-// focus on weakness and think asm instructions
-// then open source
