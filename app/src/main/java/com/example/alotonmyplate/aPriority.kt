@@ -16,13 +16,30 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+
+
+class soomething(val somer: Int) {
+
+}
+
 
 @Composable
 fun aPriorityButton(){
     val priorityName: MutableState<String> = remember { mutableStateOf("") }
+    // they should all share the same keyboard state so that its only one
     val keyboardController = LocalSoftwareKeyboardController.current
+    val buttonColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFD0BCFF)) }
+
+    //onclick it goes to 1 color to another to another
+    // onclick change the color from one to another
+    // i should make it a heap object to save from all stack objects
+    // being bloated becuase they share the same one
+    // i shouldnt make it a global dss or bss because that will increase load time
+
+
     /**
      * icon button and row color share state
      * only want 3 colors
