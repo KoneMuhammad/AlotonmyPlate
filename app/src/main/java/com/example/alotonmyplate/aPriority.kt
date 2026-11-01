@@ -20,12 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
-
-class soomething(val somer: Int) {
-
-}
-
-
+val iconColorArray: Array<Color> = arrayOf(Color(),Color(),Color())
 @Composable
 fun aPriorityButton(){
     val priorityName: MutableState<String> = remember { mutableStateOf("") }
@@ -33,20 +28,15 @@ fun aPriorityButton(){
     val keyboardController = LocalSoftwareKeyboardController.current
     val buttonColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFD0BCFF)) }
 
-    //onclick it goes to 1 color to another to another
-    // onclick change the color from one to another
-    // i should make it a heap object to save from all stack objects
-    // being bloated becuase they share the same one
-    // i shouldnt make it a global dss or bss because that will increase load time
-
-
-    /**
-     * icon button and row color share state
-     * only want 3 colors
-     * severity red, orange, and blue chillax
-     * row color changes dependant on the icon button being clicked
-     *
-     */
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+    fun changeColor(): Color {
+        if (index.value > 3){
+            index.value = 0
+        }
+        val color = iconColorArray[index.value]
+        index.value +=1;
+        return color
+    }
 
     Row(
         modifier = Modifier.fillMaxSize(0.5f)
@@ -56,19 +46,13 @@ fun aPriorityButton(){
         horizontalArrangement = Arrangement.Absolute.SpaceBetween,
 
     ) {
-        IconButton(onClick = {
-        }, colors =,  ) {
+        IconButton(onClick = {changeColor() }, colors =,  ) {
         }
         Text(text = priorityName.value)
     }
 
 }
-
-
-
-
-
-
-
-
-
+// performance it == asm instructions so thats the key
+// read code
+// focus on weakness and think asm instructions
+// then open source
