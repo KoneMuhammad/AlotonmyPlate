@@ -16,8 +16,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import com.example.alotonmyplate.R
 
+
+
+        //here im adding photos into mycode
+//then ill do assembly instructions for max speed and kernel level threading
+// and maybe some local threading
+//make app so fast so good, make app so fast start time, add this to open source repositories
+// going nanc a nanc cibere there repositories
 //populate colors
 val iconContainerolors: Array<Color> = arrayOf(Color(0xFF00999F),Color(0xFFB88000),Color(0xFFA61113))
 val rowColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
@@ -57,12 +66,12 @@ fun aPriorityButton(){
             containerColor = currentIconContainerColor.value,
                 contentColor = ,))
         {
-            Icon(imageVector =
+            Icon(imageVector = ImageVector()
             )
         }
         Text(priorityName.value)
     }
 }
-
+// i can do this and this also allows me to top performance on apps
 // contribute to fluffy chat
 // look for other open source repositories and make a small
