@@ -19,10 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.alotonmyplate.R
+import com.example.test.imageVector.priority_high
 
 
-
-        //here im adding photos into mycode
+//here im adding photos into mycode
 //then ill do assembly instructions for max speed and kernel level threading
 // and maybe some local threading
 //make app so fast so good, make app so fast start time, add this to open source repositories
@@ -66,7 +66,8 @@ fun aPriorityButton(){
             containerColor = currentIconContainerColor.value,
                 contentColor = ,))
         {
-            Icon(imageVector = ImageVector()
+            Icon(imageVector = priority_high,
+                contentDescription = "Exlamation Point"
             )
         }
         Text(priorityName.value)
