@@ -16,9 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.example.alotonmyplate.R
 import com.example.test.imageVector.priority_high
 
 val iconContainerolors: Array<Color> = arrayOf(Color(0xFF00999F),Color(0xFFB88000),Color(0xFFA61113))
@@ -71,5 +69,4 @@ fun aPriorityButton(){
         Text(priorityName.value)
     }
 }
-//check for masjid's
 

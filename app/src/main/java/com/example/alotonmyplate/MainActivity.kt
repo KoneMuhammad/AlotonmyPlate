@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity(){
         super.onCreate(savedInstanceState, persistentState)
         enableEdgeToEdge()
         setContent {
+            Scaffold() { }
 
         }
     }
