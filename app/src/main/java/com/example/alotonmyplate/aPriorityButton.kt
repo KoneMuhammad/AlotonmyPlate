@@ -90,13 +90,6 @@ fun aPriorityButton(){
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        //this is jetpack compose
-       //makes synchronous sys call to the gpu with the @composabble
-        //doesnt  blokc other code runs.
-        //this they stuff
-        // top down measureement
-        // if top have none it follows child
         Box(modifier = Modifier.fillMaxHeight(0.7f)
             .fillMaxWidth(0.17f)
             .clip(RoundedCornerShape(percent = 15))
@@ -128,3 +121,4 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
+// add outline & dropshadow: clarity
