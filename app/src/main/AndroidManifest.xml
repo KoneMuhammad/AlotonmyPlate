@@ -4,18 +4,13 @@
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon=""
-        android:label="@string/app_name"
-        android:roundIcon=""
+        android:label="AlotonmyPLate"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AlotonmyPlate">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AlotonmyPlate"
+            android:label="AlotonmyPLate"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

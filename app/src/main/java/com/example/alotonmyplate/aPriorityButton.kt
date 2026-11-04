@@ -55,7 +55,6 @@ fun aPriorityButton(){
         currentIconColor.value = iconColor
         index.value +=1;
     }
-
     Row(
         modifier = Modifier.fillMaxSize(0.5f)
             .fillMaxHeight(0.1f).
