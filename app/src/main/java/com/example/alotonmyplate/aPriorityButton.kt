@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -24,8 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,7 +71,8 @@ fun aPriorityButton(){
     Row(
         modifier = Modifier.fillMaxWidth(0.5f)
             .fillMaxHeight(0.1f)
-            .background(color = currentRowColor.value)
+            .clip(RoundedCornerShape(percent = 10))
+            .background(color = currentRowColor.value,)
             .clickable(true, onClick = {keyboardController?.show()})
             .offset(
                 {
@@ -83,7 +88,7 @@ fun aPriorityButton(){
         horizontalArrangement = Arrangement.Absolute.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(modifier = Modifier.fillMaxHeight(0.9f),
+        IconButton(modifier = Modifier.fillMaxHeight(0.7f),
             onClick = {changeColor() },
             colors = IconButtonDefaults.iconButtonColors(
             containerColor = currentIconContainerColor.value))
