@@ -1,6 +1,7 @@
 package com.example.alotonmyplate
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +44,8 @@ import kotlin.math.roundToInt
 val iconContainerolors: Array<Color> = arrayOf(Color(0xFF00999F),Color(0xFFB88000),Color(0xFFA61113))
 val rowColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
 
+val rowBorderColors: Array<Color> = arrayOf(Color(0xFF153637),Color(0xFF4B3402),Color(0xFF490405))
+
 val iconColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
 
 @Composable
@@ -54,8 +57,11 @@ fun aPriorityButton(){
     val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
     val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
 
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+
+    // im doing their way of writing a composable to show send to gpu
 
     fun changeColor() {
         if (index.value > 3){
@@ -64,17 +70,23 @@ fun aPriorityButton(){
         val iconContainerColor = iconContainerolors[index.value]
         val rowColor = rowColors[index.value]
         val iconColor = iconColors[index.value]
+        val rowBorderColor = rowBorderColors[index.value]
 
         currentIconContainerColor.value = iconContainerColor
         currentRowColor.value = rowColor
         currentIconColor.value = iconColor
+        currentRowBorderColor.value = rowBorderColor
         index.value +=1;
+
     }
     Row(
         modifier = Modifier.fillMaxWidth(0.5f)
             .fillMaxHeight(0.1f)
             .clip(RoundedCornerShape(percent = 15))
             .background(color = currentRowColor.value)
+            .border(  width = 0.4.dp,
+                color = currentRowBorderColor.value,
+                shape = RoundedCornerShape(percent = 15))
             .clickable(true, onClick = {keyboardController?.show()})
             .offset(
                 {
@@ -94,7 +106,8 @@ fun aPriorityButton(){
             .fillMaxWidth(0.17f)
             .clip(RoundedCornerShape(percent = 15))
             .background(color = currentIconContainerColor.value)
-            .clickable( onClick = {changeColor() }),
+            .clickable( onClick = {changeColor() })
+            ,
             contentAlignment = Alignment.Center
         )
         {
@@ -121,4 +134,4 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
-// add outline & dropshadow: clarity
+
