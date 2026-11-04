@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -74,7 +76,6 @@ fun aPriorityButton(){
             .clip(RoundedCornerShape(percent = 15))
             .background(color = currentRowColor.value)
             .clickable(true, onClick = {keyboardController?.show()})
-            .padding(horizontal = 5.dp)
             .offset(
                 {
                     IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
@@ -86,17 +87,29 @@ fun aPriorityButton(){
                        mostRecentPointerLocation.value = dragAmount
                    }
             },
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(modifier = Modifier.fillMaxHeight(0.7f),
-            onClick = {changeColor() },
-            colors = IconButtonDefaults.iconButtonColors(
-            containerColor = currentIconContainerColor.value))
+
+        //this is jetpack compose
+       //makes synchronous sys call to the gpu with the @composabble
+        //doesnt  blokc other code runs.
+        //this they stuff
+        // top down measureement
+        // if top have none it follows child
+        Box(modifier = Modifier.fillMaxHeight(0.7f)
+            .fillMaxWidth(0.17f)
+            .clip(RoundedCornerShape(percent = 15))
+            .background(color = currentIconContainerColor.value)
+            .clickable( onClick = {changeColor() }),
+            contentAlignment = Alignment.Center
+        )
         {
-            Icon(imageVector = priority_high,
+            Icon(modifier = Modifier.fillMaxHeight(0.9f),
+                imageVector = priority_high,
                 contentDescription = "Exlamation Point",
                 tint = currentIconColor.value
+
             )
         }
         Text(priorityName.value, color = Color(0xFF153637))
@@ -115,7 +128,3 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
-//making the sizing
-// and then run logic on each composable have 5 elements
-// i like this logic and this comparative alu eelemnts
-// i can even do simd on all these maybe
