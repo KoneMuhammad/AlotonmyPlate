@@ -71,9 +71,10 @@ fun aPriorityButton(){
     Row(
         modifier = Modifier.fillMaxWidth(0.5f)
             .fillMaxHeight(0.1f)
-            .clip(RoundedCornerShape(percent = 10))
-            .background(color = currentRowColor.value,)
+            .clip(RoundedCornerShape(percent = 15))
+            .background(color = currentRowColor.value)
             .clickable(true, onClick = {keyboardController?.show()})
+            .padding(horizontal = 5.dp)
             .offset(
                 {
                     IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
@@ -98,7 +99,7 @@ fun aPriorityButton(){
                 tint = currentIconColor.value
             )
         }
-        Text(priorityName.value)
+        Text(priorityName.value, color = Color(0xFF153637))
     }
 }
 
@@ -108,7 +109,8 @@ fun previewaPriorityButton(){
     Column(verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.height(300.dp)
-        .width(300.dp))
+        .width(300.dp)
+        .background(color = Color(0xFFD1E5DC)))
     {
         aPriorityButton()
     }
