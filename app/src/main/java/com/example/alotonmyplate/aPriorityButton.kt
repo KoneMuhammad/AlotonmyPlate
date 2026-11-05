@@ -77,7 +77,6 @@ fun aPriorityButton(){
         index.value +=1;
 
     }
-
     Row(
         modifier = Modifier
             .offset(
@@ -86,19 +85,31 @@ fun aPriorityButton(){
                     y = mostRecentPointerLocation.value.y.roundToInt())
             }
         )
-            .fillMaxWidth(0.5f)
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress { change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+                //types of io ie buffer etc, and how i get the---
+                //data and the flow of code after before and during
+                // the io stuff
+                //what it is that im getting--
+                // what does that data im getting represent
+                //i think these two most important other is naa
+                //and what it is that im setting [thing imsettig]--
+
+                // like underneath like the thing how it relates
+                // to the program,what is it in the program
+                //what it does to the program
+                //is it a location, is it a offsset,
+                .fillMaxWidth(0.5f)
             .fillMaxHeight(0.1f)
             .clip(RoundedCornerShape(percent = 15))
             .background(color = currentRowColor.value)
             .border(  width = 0.4.dp,
                 color = currentRowBorderColor.value,
                 shape = RoundedCornerShape(percent = 15))
-            .clickable(true, onClick = {keyboardController?.show()})
-            .pointerInput(Unit ){
-                   detectDragGesturesAfterLongPress { change, dragAmount ->
-                       mostRecentPointerLocation.value = dragAmount
-                   }
-            },
+            .clickable(true, onClick = {keyboardController?.show()}),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
