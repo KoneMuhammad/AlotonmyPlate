@@ -40,8 +40,17 @@ fun PrioritiesScreen() {
             indication = null,
             onClick = { }
         )
+        //child is not moving inside the parent
+        //almost as if upon new drawings the childs position in offset cant change
+        //
     )
     {
+        //box has to allow for child to resize himeslf
+        //composable happen
+        // parent measure child measure,
+        //child draw then parent
+        //child needs parents constraints before drawing
+        //P-m -> C-m || C-draw P-draw
         listOfComposables.forEach { content ->
             content()
 

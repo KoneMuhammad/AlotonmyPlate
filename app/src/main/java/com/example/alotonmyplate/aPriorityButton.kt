@@ -61,8 +61,6 @@ fun aPriorityButton(){
 
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
 
-    // im doing their way of writing a composable to show send to gpu
-
     fun changeColor() {
         if (index.value > 3){
             index.value = 0
@@ -79,8 +77,16 @@ fun aPriorityButton(){
         index.value +=1;
 
     }
+
     Row(
-        modifier = Modifier.fillMaxWidth(0.5f)
+        modifier = Modifier
+            .offset(
+            {
+                IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                    y = mostRecentPointerLocation.value.y.roundToInt())
+            }
+        )
+            .fillMaxWidth(0.5f)
             .fillMaxHeight(0.1f)
             .clip(RoundedCornerShape(percent = 15))
             .background(color = currentRowColor.value)
@@ -88,12 +94,6 @@ fun aPriorityButton(){
                 color = currentRowBorderColor.value,
                 shape = RoundedCornerShape(percent = 15))
             .clickable(true, onClick = {keyboardController?.show()})
-            .offset(
-                {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
-                }
-            )
             .pointerInput(Unit ){
                    detectDragGesturesAfterLongPress { change, dragAmount ->
                        mostRecentPointerLocation.value = dragAmount
@@ -134,4 +134,3 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
-
