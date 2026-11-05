@@ -61,21 +61,22 @@ fun aPriorityButton(){
 
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
 
+    //doesnt work
+    // see if statements > see crash
     fun changeColor() {
-        if (index.value > 3){
+        if (index.value > 3) {
             index.value = 0
         }
-        val iconContainerColor = iconContainerolors[index.value]
-        val rowColor = rowColors[index.value]
-        val iconColor = iconColors[index.value]
-        val rowBorderColor = rowBorderColors[index.value]
+            val iconContainerColor = iconContainerolors[index.value]
+            val rowColor = rowColors[index.value]
+            val iconColor = iconColors[index.value]
+            val rowBorderColor = rowBorderColors[index.value]
 
-        currentIconContainerColor.value = iconContainerColor
-        currentRowColor.value = rowColor
-        currentIconColor.value = iconColor
-        currentRowBorderColor.value = rowBorderColor
-        index.value +=1;
-
+            currentIconContainerColor.value = iconContainerColor
+            currentRowColor.value = rowColor
+            currentIconColor.value = iconColor
+            currentRowBorderColor.value = rowBorderColor
+            index.value += 1
     }
     Row(
         modifier = Modifier
@@ -89,12 +90,25 @@ fun aPriorityButton(){
                 detectDragGesturesAfterLongPress { change, dragAmount ->
                     mostRecentPointerLocation.value += dragAmount
                 }
+                   // different types of blocking etc
+                // concurrency what is it for real
+                // i understand data coming in from devices, and other io,
+                // dont understadn the different blockings or coroutines and how it really works
             }
+                //BOOM
+                // when coroutine suspends
+                // it frees that thread for other work,
+
                 //types of io ie buffer etc, and how i get the---
                 //data and the flow of code after before and during
                 // the io stuff
                 //what it is that im getting--
                 // what does that data im getting represent
+
+                //which device am i getting that data from
+                // and that data before coming in me, how is it like
+                // formulated and come accross to me
+
                 //i think these two most important other is naa
                 //and what it is that im setting [thing imsettig]--
 
@@ -145,3 +159,7 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
+// learnings
+// crashes after red
+// difficult to click the icon
+// sizings
