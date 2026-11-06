@@ -31,12 +31,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.test.imageVector.priority_high
@@ -49,6 +54,8 @@ val rowBorderColors: Array<Color> = arrayOf(Color(0xFF153637),Color(0xFF4B3402),
 
 val iconColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
 
+val ShadowColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
+
 @Composable
 fun aPriorityButton(){
     val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
@@ -59,30 +66,37 @@ fun aPriorityButton(){
     val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
 
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
-    // arrayaccessing non element
+    val isShadowElevation = remember { mutableStateOf(false) }
+
+    fun addShadowElevation(): Dp {
+        if(isShadowElevation.value == true){
+            return 30.dp
+        }
+        else{
+            return 0.dp
+        }
+    }
+
     fun changeColor() {
         if (index.value > 2) {
             index.value = 0
         }
-            val iconContainerColor = iconContainerolors[index.value]
-            val rowColor = rowColors[index.value]
-            val iconColor = iconColors[index.value]
-            val rowBorderColor = rowBorderColors[index.value]
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
 
-            currentIconContainerColor.value = iconContainerColor
-            currentRowColor.value = rowColor
-            currentIconColor.value = iconColor
-            currentRowBorderColor.value = rowBorderColor
-            index.value += 1
+        index.value += 1
     }
 
     // my program and data
     // callbacks on dragstart, dragend, & dragcancel
 
     // syscall c{} -> <- when data come in ram, c{} completes} entire detectdrag function aswell
-
     Row(
         modifier = Modifier
             .offset(
@@ -91,9 +105,20 @@ fun aPriorityButton(){
                     y = mostRecentPointerLocation.value.y.roundToInt())
             }
         )
+
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = Shadow(
+                    radius = 30.dp,
+                    spread = -5.dp,
+                    color = currentShadowColor.value,
+                    offset = DpOffset(0.dp, addShadowElevation())
+                )
+            )
             .pointerInput(Unit ){
                 detectDragGesturesAfterLongPress(
-                    onDragStart = {}
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
                 ) {
                     change, dragAmount ->
                     mostRecentPointerLocation.value += dragAmount
