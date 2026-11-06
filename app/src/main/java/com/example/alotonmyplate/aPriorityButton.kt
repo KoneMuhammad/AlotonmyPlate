@@ -62,13 +62,7 @@ fun aPriorityButton(){
 
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
 
-//defineetly alu operations
-
-    // ok and in that i get th errors so who si responsible for like setting
-    //that upw here programs like write to the cnsole? on android ?
-    //ie if i diddnt start a android project and it gave me the template and stuff
-    // with jetpack compose and i run the program, would i still get those logs?
-    // or they set it up and added them
+    // arrayaccessing non element
     fun changeColor() {
         if (index.value > 2) {
             index.value = 0
@@ -97,7 +91,6 @@ fun aPriorityButton(){
                     mostRecentPointerLocation.value += dragAmount
                 }
             }
-
                 .fillMaxWidth(0.5f)
             .fillMaxHeight(0.1f)
             .clip(RoundedCornerShape(percent = 15))
@@ -141,7 +134,7 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
-// learnings
-// crashes after red
-// difficult to click the icon
+
+//text changable
+// difficult to click the icon[bigger]
 // sizings
