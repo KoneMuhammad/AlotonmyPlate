@@ -61,7 +61,6 @@ fun aPriorityButton(){
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
 
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
-
     // arrayaccessing non element
     fun changeColor() {
         if (index.value > 2) {
@@ -78,6 +77,12 @@ fun aPriorityButton(){
             currentRowBorderColor.value = rowBorderColor
             index.value += 1
     }
+
+    // my program and data
+    // callbacks on dragstart, dragend, & dragcancel
+
+    // syscall c{} -> <- when data come in ram, c{} completes} entire detectdrag function aswell
+
     Row(
         modifier = Modifier
             .offset(
@@ -87,7 +92,10 @@ fun aPriorityButton(){
             }
         )
             .pointerInput(Unit ){
-                detectDragGesturesAfterLongPress { change, dragAmount ->
+                detectDragGesturesAfterLongPress(
+                    onDragStart = {}
+                ) {
+                    change, dragAmount ->
                     mostRecentPointerLocation.value += dragAmount
                 }
             }
@@ -134,7 +142,10 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
-
+// i want an animation that loooks like its lifed up as the person is dragging it . what it looks like
+// i want a new animation when its placed down // on event
+// i want multiple screens[modes] //easy
+// i want to persist this information on program shutdowns // ssd
 //text changable
 // difficult to click the icon[bigger]
 // sizings
