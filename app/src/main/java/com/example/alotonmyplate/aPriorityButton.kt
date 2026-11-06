@@ -1,5 +1,6 @@
 package com.example.alotonmyplate
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -61,10 +62,15 @@ fun aPriorityButton(){
 
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
 
-    //doesnt work
-    // see if statements > see crash
+//defineetly alu operations
+
+    // ok and in that i get th errors so who si responsible for like setting
+    //that upw here programs like write to the cnsole? on android ?
+    //ie if i diddnt start a android project and it gave me the template and stuff
+    // with jetpack compose and i run the program, would i still get those logs?
+    // or they set it up and added them
     fun changeColor() {
-        if (index.value > 3) {
+        if (index.value > 2) {
             index.value = 0
         }
             val iconContainerColor = iconContainerolors[index.value]
@@ -90,32 +96,8 @@ fun aPriorityButton(){
                 detectDragGesturesAfterLongPress { change, dragAmount ->
                     mostRecentPointerLocation.value += dragAmount
                 }
-                   // different types of blocking etc
-                // concurrency what is it for real
-                // i understand data coming in from devices, and other io,
-                // dont understadn the different blockings or coroutines and how it really works
             }
-                //BOOM
-                // when coroutine suspends
-                // it frees that thread for other work,
 
-                //types of io ie buffer etc, and how i get the---
-                //data and the flow of code after before and during
-                // the io stuff
-                //what it is that im getting--
-                // what does that data im getting represent
-
-                //which device am i getting that data from
-                // and that data before coming in me, how is it like
-                // formulated and come accross to me
-
-                //i think these two most important other is naa
-                //and what it is that im setting [thing imsettig]--
-
-                // like underneath like the thing how it relates
-                // to the program,what is it in the program
-                //what it does to the program
-                //is it a location, is it a offsset,
                 .fillMaxWidth(0.5f)
             .fillMaxHeight(0.1f)
             .clip(RoundedCornerShape(percent = 15))
