@@ -100,11 +100,6 @@ fun aPriorityButton(){
 
         index.value += 1
     }
-
-    // my program and data
-    // callbacks on dragstart, dragend, & dragcancel
-
-    // syscall c{} -> <- when data come in ram, c{} completes} entire detectdrag function aswell
     Row(
         modifier = Modifier
             .offset(
@@ -169,9 +164,3 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
-// i want a new animation when its placed down // like some sort of skip right now
-// i want multiple screens[modes] //easy
-// i want to persist this information on program shutdowns // ssd
-//text changable
-// difficult to click the icon[bigger]
-// sizings
