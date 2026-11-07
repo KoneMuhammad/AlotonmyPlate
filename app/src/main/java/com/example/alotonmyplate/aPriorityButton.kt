@@ -71,15 +71,23 @@ fun aPriorityButton(){
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
     val isShadowElevation = remember { mutableStateOf(false) }
 
-    fun addShadowElevation(): Dp {
+    fun addShadow(): Shadow{
         if(isShadowElevation.value == true){
-            return 30.dp
-        }
-        else{
-            return 0.dp
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
         }
     }
-
     fun changeColor() {
         if (index.value > 2) {
             index.value = 0
@@ -105,15 +113,9 @@ fun aPriorityButton(){
                     y = mostRecentPointerLocation.value.y.roundToInt())
             }
         )
-
             .dropShadow(
                 shape = RoundedCornerShape(percent = 15),
-                shadow = Shadow(
-                    radius = 30.dp,
-                    spread = -5.dp,
-                    color = currentShadowColor.value,
-                    offset = DpOffset(0.dp, addShadowElevation())
-                )
+                shadow = addShadow()
             )
             .pointerInput(Unit ){
                 detectDragGesturesAfterLongPress(
@@ -167,8 +169,7 @@ fun previewaPriorityButton(){
         aPriorityButton()
     }
 }
-// i want an animation that loooks like its lifed up as the person is dragging it . what it looks like
-// i want a new animation when its placed down // on event
+// i want a new animation when its placed down // like some sort of skip right now
 // i want multiple screens[modes] //easy
 // i want to persist this information on program shutdowns // ssd
 //text changable
