@@ -5,15 +5,23 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
+
+
 @Composable
 fun ShowAScreen() {
-    val multipleScreens = remember { mutableStateListOf<@Composable () -> Unit>() }
+    val multipleScreens = remember { mutableStateListOf<indexHolder>() }
 
-    multipleScreens.add {
-        PrioritiesScreen(multipleScreens)
+    multipleScreens.add(indexHolder())
+
+    multipleScreens.forEachIndexed { index, holder ->
+        holder.index = index
     }
-    multipleScreens.forEachIndexed { index, function ->
-        PrioritiesScreen(multipleScreens, index)
-    }
-    multipleScreens[0].invoke()
+
+    multipleScreens[0].PrioritiesScreen(multipleScreens)
+
 }
+
+
+// only first element has
+// when adding yes it as thign
+// but when invoke it needs same one

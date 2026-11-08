@@ -16,54 +16,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 
-@Composable
-fun PrioritiesScreen(arrayOfComposables: MutableList<@Composable ()-> Unit>, index: Int = 0) {
 
-    val theyAdded = remember { mutableStateOf(false) }
+class indexHolder {
+    var index: Int = 0
 
-    val listOfComposables = remember {
-        mutableStateListOf<@Composable () -> Unit>()
-    }
-    val incrament = remember { mutableStateOf(0) }
+    @Composable
+    fun PrioritiesScreen(arrayOfComposables: MutableList<indexHolder>,) {
 
-    fun incramentor() {
-        if (incrament.value == 6) {
-            return;
+        val theyAdded = remember { mutableStateOf(false) }
+
+        val listOfComposables = remember {
+            mutableStateListOf<@Composable () -> Unit>()
         }
-        listOfComposables.add { aPriorityButton() }
-        incrament.value++
-    }
+        val incrament = remember { mutableStateOf(0) }
 
-    if(theyAdded.value == true) {
-        return arrayOfComposables[index + 1].invoke()
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Cyan)
-            .pointerInput(Unit) {
-                detectHorizontalDragGestures { change, dragAmount ->
-                }
+        fun incramentor() {
+            if (incrament.value == 6) {
+                return;
             }
-            .combinedClickable(
-            onDoubleClick = { incramentor() },
-            interactionSource = null,
-            indication = null,
-            onClick = { }
-        )
-
-    )
-    {
-        FloatingActionButton(
-            containerColor = Color(0xFFC9ECED),
-            shape = RoundedCornerShape(percent = 15),
-            onClick = { arrayOfComposables.add({PrioritiesScreen(arrayOfComposables,index)})
-                      theyAdded.value = true
-            } ) {
+            listOfComposables.add { aPriorityButton() }
+            incrament.value++
         }
-        listOfComposables.forEach { content ->
-            content()
 
+        if (theyAdded.value == true) {
+            return arrayOfComposables[index + 1].PrioritiesScreen(arrayOfComposables)
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Cyan)
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures { change, dragAmount ->
+                    }
+                }
+                .combinedClickable(
+                    onDoubleClick = { incramentor() },
+                    interactionSource = null,
+                    indication = null,
+                    onClick = { }
+                )
+
+        )
+        {
+            FloatingActionButton(
+                containerColor = Color(0xFFC9ECED),
+                shape = RoundedCornerShape(percent = 15),
+                onClick = {
+                    arrayOfComposables.add(indexHolder())
+                    theyAdded.value = true
+                }) {
+            }
+            listOfComposables.forEach { content ->
+                content()
+
+            }
         }
     }
 }
