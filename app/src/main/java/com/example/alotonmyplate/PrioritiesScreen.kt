@@ -17,7 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 
 @Composable
-fun PrioritiesScreen(arrayOfComposables: MutableList<@Composable ()-> Unit>, ) {
+fun PrioritiesScreen(arrayOfComposables: MutableList<@Composable ()-> Unit>, index: Int = 0) {
+
+    val theyAdded = remember { mutableStateOf(false) }
+
     val listOfComposables = remember {
         mutableStateListOf<@Composable () -> Unit>()
     }
@@ -29,6 +32,10 @@ fun PrioritiesScreen(arrayOfComposables: MutableList<@Composable ()-> Unit>, ) {
         }
         listOfComposables.add { aPriorityButton() }
         incrament.value++
+    }
+
+    if(theyAdded.value == true) {
+        return arrayOfComposables[index + 1].invoke()
     }
     Box(
         modifier = Modifier
@@ -50,9 +57,9 @@ fun PrioritiesScreen(arrayOfComposables: MutableList<@Composable ()-> Unit>, ) {
         FloatingActionButton(
             containerColor = Color(0xFFC9ECED),
             shape = RoundedCornerShape(percent = 15),
-            onClick = { arrayOfComposables.add({PrioritiesScreen(arrayOfComposables)})
-
-                } ) {
+            onClick = { arrayOfComposables.add({PrioritiesScreen(arrayOfComposables,index)})
+                      theyAdded.value = true
+            } ) {
         }
         listOfComposables.forEach { content ->
             content()
