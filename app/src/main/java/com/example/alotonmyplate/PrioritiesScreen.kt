@@ -87,9 +87,9 @@ class indexHolder {
         )
         {
             FloatingActionButton(
-                modifier = Modifier.fillMaxHeight(0.2f)
+                modifier = Modifier.fillMaxHeight(0.1f)
                     .fillMaxWidth(0.2f)
-                    .offset(x = 30.dp, y = 30.dp),
+                    .offset(x = maxWidth * 0.8f, y = maxHeight * 0.1f),
                 containerColor = Color(0xFFC9ECED),
                 shape = RoundedCornerShape(percent = 15),
                 onClick = {
@@ -126,3 +126,6 @@ class indexHolder {
     }
 }
 }
+// you so boxxed in to their code and literally framework, trying to break out
+// know waht they added and tweak their code
+
