@@ -20,8 +20,6 @@ fun ShowAScreen() {
     multipleScreens[0].PrioritiesScreen(multipleScreens)
 
 }
-
-
-// only first element has
-// when adding yes it as thign
-// but when invoke it needs same one
+// that way
+// conflict on state change of this
+// add new one and then idk

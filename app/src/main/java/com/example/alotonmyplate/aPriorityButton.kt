@@ -145,7 +145,6 @@ fun aPriorityButton(){
                 imageVector = priority_high,
                 contentDescription = "Exlamation Point",
                 tint = currentIconColor.value
-
             )
         }
         Text(priorityName.value, color = Color(0xFF153637))
