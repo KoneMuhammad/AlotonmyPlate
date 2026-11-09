@@ -37,12 +37,13 @@ class indexHolder {
     var index: Int = 0
 
     @Composable
-    fun PrioritiesScreen(arrayOfComposables: SnapshotStateList<indexHolder>,) {
+    fun PrioritiesScreen(arrayOfComposables: SnapshotStateList<indexHolder>) {
 
         val listOfComposables = remember {
             mutableStateListOf<@Composable () -> Unit>()
         }
         val incrament = remember { mutableStateOf(0) }
+        val isElementAdded = remember { mutableStateOf(false) }
 
         fun incramentor() {
             if (incrament.value == 6) {
@@ -50,8 +51,12 @@ class indexHolder {
             }
             listOfComposables.add { aPriorityButton() }
             incrament.value++
-        }
 
+        }
+        if (isElementAdded.value == true){
+            isElementAdded.value = false
+           return  arrayOfComposables[index + 1].PrioritiesScreen(arrayOfComposables)
+        }
 
         BoxWithConstraints(
             modifier = Modifier
@@ -82,18 +87,20 @@ class indexHolder {
                 containerColor = Color(0xFFC9ECED),
                 shape = RoundedCornerShape(percent = 15),
                 onClick = {
-                    if(arrayOfComposables.size >= 4) {
-                    }
-                    else {
-                        arrayOfComposables.add(indexHolder())
+                    if(arrayOfComposables.size <= 3){
+                  arrayOfComposables.add(indexHolder())
+                    isElementAdded.value = true}
+                    else{
+
                     }
                 }) {
                 Icon(
                     imageVector = add,
                     contentDescription = "Exlamation Point",
 
-                )
-                if(){
+                    )
+            }
+             /**   if(){
                     Card(modifier = Modifier.offset(x = maxWidth * 0.5f, y = maxHeight * 0.5f)
                         .fillMaxWidth(0.35f)
                         .fillMaxHeight(0.2f)
@@ -101,12 +108,8 @@ class indexHolder {
                             color = Color(0xFFB88000))
 
                     ) {
-                        //timed
-
-                        Text("No you cant have more than 4 Screens")
-                    }
-                }
-            }
+                        Text("No you cant have more than 4 Screens")}
+              */
             listOfComposables.forEach { content ->
                 content()
 
@@ -114,5 +117,3 @@ class indexHolder {
         }
     }
 }
-
-//recomposition updates and keeps the statee
