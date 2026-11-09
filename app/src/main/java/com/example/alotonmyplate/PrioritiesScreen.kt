@@ -4,6 +4,7 @@ import android.R
 import android.health.connect.datatypes.units.Percentage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -32,24 +33,15 @@ import androidx.compose.ui.unit.dp
 import com.example.test.add
 import com.example.test.imageVector.priority_high
 
-// place a max of priorties screen
-// add animation on navigation
-// add colour picker for each screen let them be pastel like colours
-// add the ability to swipte right or left for screens
-
 class indexHolder {
     var index: Int = 0
 
     @Composable
     fun PrioritiesScreen(arrayOfComposables: SnapshotStateList<indexHolder>,) {
-        val visible = remember { mutableStateOf(true) }
-
-        val theyAdded = remember { mutableStateOf(false) }
 
         val listOfComposables = remember {
             mutableStateListOf<@Composable () -> Unit>()
         }
-        val raiseMaxScreensFlag = remember { mutableStateOf(false) }
         val incrament = remember { mutableStateOf(0) }
 
         fun incramentor() {
@@ -60,15 +52,7 @@ class indexHolder {
             incrament.value++
         }
 
-        if (theyAdded.value == true) {
-            visible.value = false
-            return arrayOfComposables[index + 1].PrioritiesScreen(arrayOfComposables)
 
-        }
-        AnimatedVisibility(
-            visible = visible.value,
-            exit = slideOutHorizontally() + fadeOut()
-        ) {
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
@@ -86,6 +70,11 @@ class indexHolder {
 
         )
         {
+            Text(
+                text = "Screens = ${arrayOfComposables.size}",
+                modifier = Modifier.offset(x = maxWidth * 0.8f, y = maxHeight * 0.05f)
+            )
+
             FloatingActionButton(
                 modifier = Modifier.fillMaxHeight(0.1f)
                     .fillMaxWidth(0.2f)
@@ -94,11 +83,9 @@ class indexHolder {
                 shape = RoundedCornerShape(percent = 15),
                 onClick = {
                     if(arrayOfComposables.size >= 4) {
-                        raiseMaxScreensFlag.value = true
                     }
                     else {
                         arrayOfComposables.add(indexHolder())
-                        theyAdded.value = true
                     }
                 }) {
                 Icon(
@@ -106,7 +93,7 @@ class indexHolder {
                     contentDescription = "Exlamation Point",
 
                 )
-                if(raiseMaxScreensFlag.value == true){
+                if(){
                     Card(modifier = Modifier.offset(x = maxWidth * 0.5f, y = maxHeight * 0.5f)
                         .fillMaxWidth(0.35f)
                         .fillMaxHeight(0.2f)
@@ -114,6 +101,8 @@ class indexHolder {
                             color = Color(0xFFB88000))
 
                     ) {
+                        //timed
+
                         Text("No you cant have more than 4 Screens")
                     }
                 }
@@ -125,7 +114,5 @@ class indexHolder {
         }
     }
 }
-}
-// you so boxxed in to their code and literally framework, trying to break out
-// know waht they added and tweak their code
 
+//recomposition updates and keeps the statee
