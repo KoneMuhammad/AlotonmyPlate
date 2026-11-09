@@ -2,6 +2,7 @@ package com.example.alotonmyplate
 
 import android.R
 import android.health.connect.datatypes.units.Percentage
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkOut
@@ -89,8 +90,10 @@ class indexHolder {
                 onClick = {
                     if(arrayOfComposables.size <= 3){
                   arrayOfComposables.add(indexHolder())
-                    isElementAdded.value = true}
+                    isElementAdded.value = true
+                    }
                     else{
+                        isElementAdded.value = false
 
                     }
                 }) {
@@ -100,20 +103,11 @@ class indexHolder {
 
                     )
             }
-             /**   if(){
-                    Card(modifier = Modifier.offset(x = maxWidth * 0.5f, y = maxHeight * 0.5f)
-                        .fillMaxWidth(0.35f)
-                        .fillMaxHeight(0.2f)
-                        .background(shape = RoundedCornerShape(percent = 15),
-                            color = Color(0xFFB88000))
-
-                    ) {
-                        Text("No you cant have more than 4 Screens")}
-              */
             listOfComposables.forEach { content ->
                 content()
 
             }
         }
+            Log.i("PING", "")
     }
 }
