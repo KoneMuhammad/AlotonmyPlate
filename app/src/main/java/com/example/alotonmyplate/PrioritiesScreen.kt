@@ -33,12 +33,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.example.test.add
 import com.example.test.imageVector.priority_high
-
-class indexHolder {
-    var index: Int = 0
-
     @Composable
-    fun PrioritiesScreen(arrayOfComposables: SnapshotStateList<indexHolder>) {
+    fun PrioritiesScreen(arrayOfComposables:composbles not sure yet) {
 
         val listOfComposables = remember {
             mutableStateListOf<@Composable () -> Unit>()
@@ -54,11 +50,6 @@ class indexHolder {
             incrament.value++
 
         }
-        if (isElementAdded.value == true){
-            isElementAdded.value = false
-           return  arrayOfComposables[index + 1].PrioritiesScreen(arrayOfComposables)
-        }
-
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,11 +67,6 @@ class indexHolder {
 
         )
         {
-            Text(
-                text = "Screens = ${arrayOfComposables.size}",
-                modifier = Modifier.offset(x = maxWidth * 0.8f, y = maxHeight * 0.05f)
-            )
-
             FloatingActionButton(
                 modifier = Modifier.fillMaxHeight(0.1f)
                     .fillMaxWidth(0.2f)
@@ -90,16 +76,11 @@ class indexHolder {
                 onClick = {
                     if(arrayOfComposables.size <= 3){
                   arrayOfComposables.add(indexHolder())
-                    isElementAdded.value = true
-                    }
-                    else{
-                        isElementAdded.value = false
-
                     }
                 }) {
                 Icon(
                     imageVector = add,
-                    contentDescription = "Exlamation Point",
+                    contentDescription = "exclamation Point",
 
                     )
             }
@@ -108,6 +89,6 @@ class indexHolder {
 
             }
         }
-            Log.i("PING", "")
     }
-}
+
+//remove all the stuff that implies im calling it from myself

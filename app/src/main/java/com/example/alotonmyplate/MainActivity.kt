@@ -33,7 +33,9 @@ class MainActivity : ComponentActivity(){
         }
     }
 }
-
+// made a index hes being displayed
+// him adding to the place, then him deciding to return what was added not right
+// becuase hes going back to caller to the
 
 // so he stores that variable on his stack
 // pushes to goes to another something:
