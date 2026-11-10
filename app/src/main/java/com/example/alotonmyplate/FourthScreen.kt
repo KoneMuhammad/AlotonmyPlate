@@ -29,8 +29,6 @@ fun FourthScreen(navigator: NavController) {
         mutableStateListOf<@Composable () -> Unit>()
     }
     val incrament = remember { mutableStateOf(0) }
-    val isElementAdded = remember { mutableStateOf(false) }
-
     fun incramentor() {
         if (incrament.value == 6) {
             return;
