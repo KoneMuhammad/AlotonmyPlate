@@ -1,40 +1,32 @@
+@file:JvmName("FirstScreenKt")
+
 package com.example.alotonmyplate
 
-import android.R
-import android.health.connect.datatypes.units.Percentage
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.test.add
-import com.example.test.imageVector.priority_high
-    @Composable
-    fun PrioritiesScreen(arrayOfComposables:composbles not sure yet) {
+
+@Composable
+    fun FirstScreen(navigator: NavController) {
+
+        val floatstate = remember { mutableStateOf(0f) }
 
         val listOfComposables = remember {
             mutableStateListOf<@Composable () -> Unit>()
@@ -56,6 +48,11 @@ import com.example.test.imageVector.priority_high
                 .background(color = Color.Cyan)
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures { change, dragAmount ->
+if(dragAmount > 0 ){
+    navigator.navigate(secondScreen)
+}
+                        else{
+                        }
                     }
                 }
                 .combinedClickable(
@@ -74,9 +71,7 @@ import com.example.test.imageVector.priority_high
                 containerColor = Color(0xFFC9ECED),
                 shape = RoundedCornerShape(percent = 15),
                 onClick = {
-                    if(arrayOfComposables.size <= 3){
-                  arrayOfComposables.add(indexHolder())
-                    }
+                    navigator.navigate(firstScreen)
                 }) {
                 Icon(
                     imageVector = add,
@@ -90,5 +85,3 @@ import com.example.test.imageVector.priority_high
             }
         }
     }
-
-//remove all the stuff that implies im calling it from myself

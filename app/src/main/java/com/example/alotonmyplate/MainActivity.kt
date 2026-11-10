@@ -23,23 +23,8 @@ class MainActivity : ComponentActivity(){
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val multipleScreens = remember { mutableStateListOf<indexHolder>() }
-
-            multipleScreens.forEachIndexed { index, holder ->
-                holder.index = index
-            }
-
-            indexHolder().PrioritiesScreen(multipleScreens)
+            allScreens()
         }
     }
 }
-// made a index hes being displayed
-// him adding to the place, then him deciding to return what was added not right
-// becuase hes going back to caller to the
 
-// so he stores that variable on his stack
-// pushes to goes to another something:
-// that other something puts on the stack,
-// i take from the first stack and move it to the second stack
-//4 stacks with values of pointers to the heap base address
-// 4 heap base addresses with indexes of themsleves
