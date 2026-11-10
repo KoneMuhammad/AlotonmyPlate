@@ -5,6 +5,7 @@ package com.example.alotonmyplate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,11 +24,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.navigation.NavController
 import com.example.test.add
 
+
 @Composable
     fun FirstScreen(navigator: NavController) {
         val isendOScreen = remember { mutableStateOf(false) }
-
-        val floatstate = remember { mutableStateOf(0f) }
 
         val listOfComposables = remember {
             mutableStateListOf<@Composable () -> Unit>()
@@ -41,7 +41,7 @@ import com.example.test.add
             incrament.value++
 
         }
-        BoxWithConstraints(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color.Cyan)
@@ -64,21 +64,6 @@ import com.example.test.add
 
         )
         {
-            FloatingActionButton(
-                modifier = Modifier.fillMaxHeight(0.1f)
-                    .fillMaxWidth(0.2f)
-                    .offset(x = maxWidth * 0.8f, y = maxHeight * 0.1f),
-                containerColor = Color(0xFFC9ECED),
-                shape = RoundedCornerShape(percent = 15),
-                onClick = {
-                    navigator.navigate(secondScreen)
-                }) {
-                Icon(
-                    imageVector = add,
-                    contentDescription = "exclamation Point",
-
-                    )
-            }
             listOfComposables.forEach { content ->
                 content()
 
