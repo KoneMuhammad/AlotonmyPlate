@@ -40,11 +40,11 @@ fun SecondScreen(navigator: NavController) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Cyan)
+            .background(color = Color.Yellow)
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { change, dragAmount ->
-                    if(dragAmount > 0 ){
-                        navigator.navigate(secondScreen)
+                    if(dragAmount < 0 ){
+                        navigator.navigate(thirdScreen)
                     }
                     else{
                         navigator.navigate(firstScreen)
@@ -67,7 +67,7 @@ fun SecondScreen(navigator: NavController) {
             containerColor = Color(0xFFC9ECED),
             shape = RoundedCornerShape(percent = 15),
             onClick = {
-                navigator.navigate(thirdtScreen)
+                navigator.navigate(thirdScreen)
             }) {
             Icon(
                 imageVector = add,

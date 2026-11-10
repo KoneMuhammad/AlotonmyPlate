@@ -40,9 +40,15 @@ fun FourthScreen(navigator: NavController) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Cyan)
+            .background(color = Color.Blue)
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { change, dragAmount ->
+                    if(dragAmount < 0 ){
+                        //animation that sais last screen
+                    }
+                    else{
+                        navigator.navigate(thirdScreen)
+                    }
                 }
             }
             .combinedClickable(

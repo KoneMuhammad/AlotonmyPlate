@@ -11,7 +11,7 @@ object firstScreen
 @Serializable
 object secondScreen
 @Serializable
-object thirdtScreen
+object thirdScreen
 @Serializable
 object fourthScreen
 
@@ -27,7 +27,7 @@ fun allScreens(){
         composable<secondScreen>{
             SecondScreen(mover)
         }
-        composable<thirdtScreen>{
+        composable<thirdScreen>{
             ThirdScreen(mover)
         }
         composable<fourthScreen>{

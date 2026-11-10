@@ -25,6 +25,7 @@ import com.example.test.add
 
 @Composable
     fun FirstScreen(navigator: NavController) {
+        val isendOScreen = remember { mutableStateOf(false) }
 
         val floatstate = remember { mutableStateOf(0f) }
 
@@ -46,10 +47,11 @@ import com.example.test.add
                 .background(color = Color.Cyan)
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures { change, dragAmount ->
-if(dragAmount > 0 ){
-    navigator.navigate(secondScreen)
-}
+                        if(dragAmount < 0 ){
+                            navigator.navigate(secondScreen)
+                        }
                         else{
+                            isendOScreen.value = true
                         }
                     }
                 }
@@ -69,7 +71,7 @@ if(dragAmount > 0 ){
                 containerColor = Color(0xFFC9ECED),
                 shape = RoundedCornerShape(percent = 15),
                 onClick = {
-                    navigator.navigate(firstScreen)
+                    navigator.navigate(secondScreen)
                 }) {
                 Icon(
                     imageVector = add,

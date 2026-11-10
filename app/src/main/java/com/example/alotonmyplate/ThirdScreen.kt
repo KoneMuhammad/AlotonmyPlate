@@ -41,9 +41,15 @@ fun ThirdScreen(navigator: NavController) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Cyan)
+            .background(color = Color.LightGray)
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { change, dragAmount ->
+                    if(dragAmount < 0 ){
+                        navigator.navigate(fourthScreen)
+                    }
+                    else{
+                        navigator.navigate(secondScreen)
+                    }
                 }
             }
             .combinedClickable(
