@@ -137,7 +137,7 @@ fun aPriorityButton(){
             .background(color = currentRowColor.value)
             .border(  width = 1.4.dp,
                 color = currentRowBorderColor.value,
-                shape = RoundedCornerShape(percent = 10))
+                )
             .clickable(true, onClick = {keyboardController?.show()}),
         verticalAlignment = Alignment.CenterVertically
     ) {
