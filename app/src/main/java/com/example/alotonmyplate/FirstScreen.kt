@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -36,11 +35,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -54,6 +59,14 @@ import androidx.compose.ui.unit.sp
 
 @Composable
     fun FirstScreen(navigator: NavController) {
+
+    val isReadOnly = remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val doThis = KeyboardActionHandler {
+        isReadOnly.value = true
+    }
+
         val isendOScreen = remember { mutableStateOf(false) }
         val listOfComposables = remember {
             mutableStateListOf<@Composable () -> Unit>() }
@@ -90,12 +103,22 @@ import androidx.compose.ui.unit.sp
 contentAlignment = Alignment.Center
         )
         {
-            FloatingActionButton(modifier = Modifier.fillMaxHeight(0.05f)
-                .fillMaxWidth(0.2f)
-                .offset(x =  maxWidth * 0.3f, y = maxHeight * -0.4f)
-                .clip(shape = RoundedCornerShape(percent = 30))
-                .background(Color.Blue),
-                onClick =  {}) {}
+            BasicTextField(modifier = Modifier.focusRequester(focusRequester)
+                .combinedClickable(onLongClick = {
+                    isReadOnly.value = false
+                    focusRequester.requestFocus()
+                    keyboardController?.show()},
+                    onClick = { }),
+                textStyle = TextStyle(
+                    fontSize = 64.sp,
+                    fontFamily = graphitiBackground,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black
+                ),
+                readOnly = isReadOnly.value,
+                onKeyboardAction = doThis,
+                state = rememberTextFieldState(initialText = "Notes"),
+            )
 
             listOfComposables.forEach { content ->
                 content()
@@ -128,7 +151,16 @@ contentAlignment = Alignment.Center
 val graphitiBackground = FontFamily(Font(R.font.permanentmarker_regular))
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun test(){
+fun test() {
+    Box(modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center) {
+
+    }
 }
+
+
+//on hold show keyboard and be able to change text
+
+
 
 
