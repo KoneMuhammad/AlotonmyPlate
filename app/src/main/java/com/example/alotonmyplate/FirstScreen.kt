@@ -65,8 +65,6 @@ import androidx.compose.ui.unit.sp
             listOfComposables.add { aPriorityButton() }
             incrament.value++ }
     var text by remember { mutableStateOf("Super Important") }
-    val focusRequester = remember { FocusRequester() }
-    val keyboard = LocalSoftwareKeyboardController.current
 
         BoxWithConstraints(
             modifier = Modifier
@@ -97,21 +95,8 @@ contentAlignment = Alignment.Center
                 .offset(x =  maxWidth * 0.3f, y = maxHeight * -0.4f)
                 .clip(shape = RoundedCornerShape(percent = 30))
                 .background(Color.Blue),
-                onClick =  {focusRequester.requestFocus()
-                    keyboard?.show() } ) {
-            }
-            BasicTextField(
-                value = text,
-                maxLines = 10,
-                onValueChange = { text = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
-                textStyle = TextStyle(
-                    fontSize = 64.sp,
-                    textAlign = TextAlign.Center,
-                    fontFamily = graphitiBackground,
-                    color = Color(0xFF09100E).copy(alpha = 0.35f),))
+                onClick =  {}) {}
+
             listOfComposables.forEach { content ->
                 content()
             }
