@@ -4,6 +4,7 @@ package com.example.alotonmyplate
 
 import android.R.attr.maxHeight
 import android.R.attr.maxWidth
+import android.R.attr.text
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -33,30 +35,39 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
 @Composable
     fun FirstScreen(navigator: NavController) {
         val isendOScreen = remember { mutableStateOf(false) }
-
         val listOfComposables = remember {
-            mutableStateListOf<@Composable () -> Unit>()
-        }
+            mutableStateListOf<@Composable () -> Unit>() }
         val incrament = remember { mutableStateOf(0) }
         fun incramentor() {
             if (incrament.value == 6) {
                 return;
             }
             listOfComposables.add { aPriorityButton() }
-            incrament.value++
+            incrament.value++ }
+    var text by remember { mutableStateOf("Super Important") }
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
 
-        }
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
@@ -81,25 +92,26 @@ import androidx.compose.ui.unit.sp
 contentAlignment = Alignment.Center
         )
         {
-            //change colour for each screen its their thing
-            // but darker,
-            //change colour of that bottom row its consistent
-            //accross all screens
-            //fix swiping
-            //
-            Text(
+            FloatingActionButton(modifier = Modifier.fillMaxHeight(0.05f)
+                .fillMaxWidth(0.2f)
+                .offset(x =  maxWidth * 0.3f, y = maxHeight * -0.4f)
+                .clip(shape = RoundedCornerShape(percent = 30))
+                .background(Color.Blue),
+                onClick =  {focusRequester.requestFocus()
+                    keyboard?.show() } ) {
+            }
+            BasicTextField(
+                value = text,
                 maxLines = 10,
-                fontSize = 64.sp,
-                textAlign = TextAlign.Center,
-                text = "",
-                fontFamily = graphitiBackground,
-                color = Color(0xFF09100E).copy(alpha = 0.35f),
-                autoSize = TextAutoSize.StepBased(
-                    minFontSize = 18.sp,
-                    maxFontSize = 64.sp
-                )
-            )
-
+                onValueChange = { text = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
+                textStyle = TextStyle(
+                    fontSize = 64.sp,
+                    textAlign = TextAlign.Center,
+                    fontFamily = graphitiBackground,
+                    color = Color(0xFF09100E).copy(alpha = 0.35f),))
             listOfComposables.forEach { content ->
                 content()
             }
@@ -128,26 +140,10 @@ contentAlignment = Alignment.Center
         }
     }
 
-val graphitiBackground = FontFamily(Font(R.font.permanentMarker_regular))
+val graphitiBackground = FontFamily(Font(R.font.permanentmarker_regular))
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun test(){
-    Box(modifier = Modifier.fillMaxSize()
-        .background(Color(0xFFB7D5CA)),
-        contentAlignment = Alignment.Center){
-        Text(
-            maxLines = 10,
-            fontSize = 64.sp,
-            textAlign = TextAlign.Center,
-            text = "",
-            fontFamily = graphitiBackground,
-            color = Color(0xFF09100E).copy(alpha = 0.35f),
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = 18.sp,
-                maxFontSize = 64.sp
-            )
-        )
-    }
 }
 
 

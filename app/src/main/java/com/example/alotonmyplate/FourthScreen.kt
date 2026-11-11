@@ -77,7 +77,7 @@ fun FourthScreen(navigator: NavController) {
             textAlign = TextAlign.Center,
             text = "",
             fontFamily = graphitiBackground,
-            color = Color(0xFF101109).copy(alpha = 0.35f),
+            color = Color(0xFF091110).copy(alpha = 0.35f),
             autoSize = TextAutoSize.StepBased(
                 minFontSize = 18.sp,
                 maxFontSize = 64.sp
