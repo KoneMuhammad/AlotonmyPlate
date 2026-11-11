@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -60,11 +61,13 @@ import androidx.compose.ui.unit.sp
 @Composable
     fun FirstScreen(navigator: NavController) {
 
-    val isReadOnly = remember { mutableStateOf(false) }
+    val isReadOnly = remember { mutableStateOf(true) }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val iseditable = remember { mutableStateOf(false) }
     val doThis = KeyboardActionHandler {
         isReadOnly.value = true
+        keyboardController?.hide()
     }
 
         val isendOScreen = remember { mutableStateOf(false) }
@@ -103,22 +106,29 @@ import androidx.compose.ui.unit.sp
 contentAlignment = Alignment.Center
         )
         {
-            BasicTextField(modifier = Modifier.focusRequester(focusRequester)
-                .combinedClickable(onLongClick = {
+            Box(modifier = Modifier.combinedClickable(
+                onClick = {},
+                onLongClick = {
                     isReadOnly.value = false
                     focusRequester.requestFocus()
-                    keyboardController?.show()},
-                    onClick = { }),
-                textStyle = TextStyle(
-                    fontSize = 64.sp,
-                    fontFamily = graphitiBackground,
-                    textAlign = TextAlign.Center,
-                    color = Color.Black
-                ),
-                readOnly = isReadOnly.value,
-                onKeyboardAction = doThis,
-                state = rememberTextFieldState(initialText = "Notes"),
+                    keyboardController?.show()}
             )
+            )
+            {
+                BasicTextField(
+                    modifier = Modifier.focusRequester(focusRequester),
+                    textStyle = TextStyle(
+                        fontSize = 64.sp,
+                        fontFamily = graphitiBackground,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                    ),
+                    readOnly = isReadOnly.value,
+                    enabled = true,
+                    onKeyboardAction = doThis,
+                    state = rememberTextFieldState(initialText = "Notes"),
+                )
+            }
 
             listOfComposables.forEach { content ->
                 content()
@@ -159,8 +169,7 @@ fun test() {
 }
 
 
-//on hold show keyboard and be able to change text
-
+// add button on side that edits the text.
 
 
 
