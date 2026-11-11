@@ -50,11 +50,15 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.test.imageVector.priority_high
@@ -80,7 +84,7 @@ import kotlin.math.roundToInt
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Cyan)
+                .background(color = Color(0xFFB7D5CA))
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures { change, dragAmount ->
                         if(dragAmount < 0 ){
@@ -128,13 +132,30 @@ import kotlin.math.roundToInt
             }
         }
     }
-// now pastel colors
-// bg thats has text
 // fix swiping, and i think ship
 //---- Extras
+// bottom animation on each navigation green
 //
+val graphitiBackground = FontFamily(Font(R.font.permanentMarker_regular))
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun test(){}
+fun test(){
+    Box(modifier = Modifier.fillMaxSize()
+        .background(Color(0xFFB7D5CA)),
+        contentAlignment = Alignment.Center){
+        Text(
+            maxLines = 10,
+            fontSize = 64.sp,
+            textAlign = TextAlign.Center,
+            text = "",
+            fontFamily = graphitiBackground,
+            color = Color(0xFF09100E).copy(alpha = 0.35f),
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 18.sp,
+                maxFontSize = 64.sp
+            )
+        )
+    }
+}
 
 

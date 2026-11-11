@@ -46,7 +46,7 @@ fun SecondScreen(navigator: NavController) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Yellow)
+            .background(color = Color(0xFFD3D8B6))
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { change, dragAmount ->
                     if(dragAmount < 0 ){

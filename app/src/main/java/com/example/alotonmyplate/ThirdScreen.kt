@@ -47,7 +47,7 @@ fun ThirdScreen(navigator: NavController) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.LightGray)
+            .background(color = Color(0xFFBCB6D8))
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { change, dragAmount ->
                     if(dragAmount < 0 ){

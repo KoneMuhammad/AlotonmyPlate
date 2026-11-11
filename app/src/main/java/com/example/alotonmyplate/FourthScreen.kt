@@ -46,7 +46,7 @@ fun FourthScreen(navigator: NavController) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Blue)
+            .background(color = Color(0xFFB6D8D4))
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { change, dragAmount ->
                     if(dragAmount < 0 ){
