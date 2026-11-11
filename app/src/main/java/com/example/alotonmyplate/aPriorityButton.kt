@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -39,11 +41,15 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.test.imageVector.priority_high
 import kotlin.math.roundToInt
 
@@ -55,6 +61,11 @@ val rowBorderColors: Array<Color> = arrayOf(Color(0xFF153637),Color(0xFF4B3402),
 val iconColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
 
 val ShadowColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
+
+val boldonse = FontFamily(
+    Font(resId = R.font.boldonse_regular)
+)
+
 
 @Composable
 fun aPriorityButton(){
@@ -122,32 +133,39 @@ fun aPriorityButton(){
                 }
             }
                 .fillMaxWidth(0.5f)
-            .fillMaxHeight(0.1f)
-            .clip(RoundedCornerShape(percent = 15))
+            .fillMaxHeight(0.055f)
             .background(color = currentRowColor.value)
-            .border(  width = 0.4.dp,
+            .border(  width = 1.4.dp,
                 color = currentRowBorderColor.value,
-                shape = RoundedCornerShape(percent = 15))
+                shape = RoundedCornerShape(percent = 10))
             .clickable(true, onClick = {keyboardController?.show()}),
-        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(modifier = Modifier.fillMaxHeight(0.7f)
-            .fillMaxWidth(0.17f)
-            .clip(RoundedCornerShape(percent = 15))
-            .background(color = currentIconContainerColor.value)
+        Box(modifier = Modifier.fillMaxHeight(1f)
             .clickable( onClick = {changeColor() })
-            ,
+            .fillMaxWidth(0.23f)
+            .background(color = currentIconContainerColor.value),
             contentAlignment = Alignment.Center
         )
         {
-            Icon(modifier = Modifier.fillMaxHeight(0.9f),
+            Icon(modifier = Modifier.fillMaxHeight(),
                 imageVector = priority_high,
                 contentDescription = "Exlamation Point",
                 tint = currentIconColor.value
             )
         }
-        Text(priorityName.value, color = Color(0xFF153637))
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(priorityName.value, color = Color(0xFF153637),
+            fontFamily = boldonse,
+            fontWeight = FontWeight.Normal,
+            maxLines = 3,
+            softWrap = true,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 6.sp,
+                maxFontSize = 18.sp
+            )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
     }
 }
 
