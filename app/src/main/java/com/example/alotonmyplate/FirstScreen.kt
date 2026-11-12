@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -41,18 +42,21 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,12 +65,12 @@ import androidx.compose.ui.unit.sp
 @Composable
     fun FirstScreen(navigator: NavController) {
 
-    val isReadOnly = remember { mutableStateOf(true) }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val iseditable = remember { mutableStateOf(false) }
+
     val doThis = KeyboardActionHandler {
-        isReadOnly.value = true
+        iseditable.value = false
         keyboardController?.hide()
     }
 
@@ -106,29 +110,38 @@ import androidx.compose.ui.unit.sp
 contentAlignment = Alignment.Center
         )
         {
-            Box(modifier = Modifier.combinedClickable(
-                onClick = {},
-                onLongClick = {
-                    isReadOnly.value = false
+            Button(modifier = Modifier.size(80.dp)
+                .offset(x = maxWidth * 0.15f, y = maxHeight * - 0.3f)
+                .background(color = Color(0xFF00999F)),
+                onClick = {
+                    iseditable.value = true
                     focusRequester.requestFocus()
-                    keyboardController?.show()}
-            )
-            )
-            {
+                    keyboardController?.show()
+                }
+            ) {
+                Text("change bg"
+                , textAlign = TextAlign.Center,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 8.sp,
+                    maxFontSize = 20.sp,
+                    ))
+            }
                 BasicTextField(
-                    modifier = Modifier.focusRequester(focusRequester),
+                    modifier = Modifier
+                        .focusRequester(focusRequester),
                     textStyle = TextStyle(
                         fontSize = 64.sp,
                         fontFamily = graphitiBackground,
                         textAlign = TextAlign.Center,
                         color = Color.Black,
                     ),
-                    readOnly = isReadOnly.value,
-                    enabled = true,
+                    enabled =  iseditable.value,
                     onKeyboardAction = doThis,
                     state = rememberTextFieldState(initialText = "Notes"),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
                 )
-            }
 
             listOfComposables.forEach { content ->
                 content()
@@ -167,9 +180,13 @@ fun test() {
 
     }
 }
-
-
-// add button on side that edits the text.
-
+// i dont want it to be editable
+// either button, or/**
+/** read only, or editable, editable is hwole thing untouched i like that
+ * no hold, make it on like swipe up maybe? nahh
+ */
+// now persist information, on screen change,
+// persist on app close
+// make button look better
 
 
