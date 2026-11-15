@@ -182,5 +182,3 @@ fun checkButton(){
         }
 }
 
-
-// keep same functionality see what enabled does
