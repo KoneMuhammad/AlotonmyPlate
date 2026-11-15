@@ -97,7 +97,7 @@ fun FourthScreen(navigator: NavController) {
                 shadow = Shadow(
                     radius = 7.dp,
                     offset = DpOffset(x = 0.dp,y= 10.dp),
-                    color = Color(0xFF94C7C1),
+                    color = Color(0xFF333333),
                 )),
             contentPadding = PaddingValues(0.dp),
             colors = ButtonDefaults.buttonColors(
@@ -111,7 +111,9 @@ fun FourthScreen(navigator: NavController) {
             }
         ) {
             Text(modifier = Modifier.fillMaxWidth(),
-                text =  "rename"
+                text =  "rename",
+                fontFamily = graphitiBackground,
+                color = Color(0xFFEEF6F5)
                 , textAlign = TextAlign.Center,
                 fontSize = 17.sp)
         }

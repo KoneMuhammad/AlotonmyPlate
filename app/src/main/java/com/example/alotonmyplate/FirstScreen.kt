@@ -123,7 +123,7 @@ contentAlignment = Alignment.Center
                     )),
                     contentPadding = PaddingValues(0.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF00999F)
+                    containerColor = Color(0xFF264037)
                 ),
                 onClick = {
                     isReadOnly.value = false
@@ -133,7 +133,9 @@ contentAlignment = Alignment.Center
                 }
             ) {
                 Text(modifier = Modifier.fillMaxWidth(),
-                   text =  "rename"
+                   text =  "rename",
+                    fontFamily = graphitiBackground,
+                    color = Color(0xFFEFF5F3)
                 , textAlign = TextAlign.Center,
                     fontSize = 17.sp)
             }

@@ -104,7 +104,7 @@ fun SecondScreen(navigator: NavController) {
                 )),
             contentPadding = PaddingValues(0.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF00999F)
+                containerColor = Color(0xFF3E4323)
             ),
             onClick = {
                 isReadOnly.value = false
@@ -114,7 +114,9 @@ fun SecondScreen(navigator: NavController) {
             }
         ) {
             Text(modifier = Modifier.fillMaxWidth(),
-                text =  "rename"
+                text =  "rename",
+                fontFamily = graphitiBackground,
+                color = Color(0xFFF5F6EE)
                 , textAlign = TextAlign.Center,
                 fontSize = 17.sp)
         }

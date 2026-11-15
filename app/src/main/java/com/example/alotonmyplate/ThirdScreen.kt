@@ -102,7 +102,7 @@ fun ThirdScreen(navigator: NavController) {
                 )),
             contentPadding = PaddingValues(0.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF9D95C6)
+                containerColor = Color(0xFF292442)
             ),
             onClick = {
                 isReadOnly.value = false
@@ -112,7 +112,9 @@ fun ThirdScreen(navigator: NavController) {
             }
         ) {
             Text(modifier = Modifier.fillMaxWidth(),
-                text =  "rename"
+                text =  "rename",
+                fontFamily = graphitiBackground,
+                color = Color(0xFFF0EEF6)
                 , textAlign = TextAlign.Center,
                 fontSize = 17.sp)
         }
