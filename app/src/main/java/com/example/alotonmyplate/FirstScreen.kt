@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,36 +45,38 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import kotlinx.coroutines.android.awaitFrame
 
 @Composable
     fun FirstScreen(navigator: NavController) {
-
-    val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val iseditable = remember { mutableStateOf(false) }
-
-    val doThis = KeyboardActionHandler {
-        iseditable.value = false
-        keyboardController?.hide()
-    }
+        val isReadOnly = remember { mutableStateOf(true) }
+        val focusRequester = remember { FocusRequester() }
 
         val isendOScreen = remember { mutableStateOf(false) }
         val listOfComposables = remember {
@@ -84,7 +88,6 @@ import androidx.compose.ui.unit.sp
             }
             listOfComposables.add { aPriorityButton() }
             incrament.value++ }
-    var text by remember { mutableStateOf("Super Important") }
 
         BoxWithConstraints(
             modifier = Modifier
@@ -92,11 +95,10 @@ import androidx.compose.ui.unit.sp
                 .background(color = Color(0xFFB7D5CA))
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures { change, dragAmount ->
-                        if(dragAmount < 0 ){
+                        if (dragAmount < 0) {
 
                             navigator.navigate(secondScreen)
-                        }
-                        else{
+                        } else {
                             isendOScreen.value = true
                         }
                     }
@@ -110,48 +112,65 @@ import androidx.compose.ui.unit.sp
 contentAlignment = Alignment.Center
         )
         {
-            Button(modifier = Modifier.size(80.dp)
-                .offset(x = maxWidth * 0.15f, y = maxHeight * - 0.3f)
-                .background(color = Color(0xFF00999F)),
+            Button(modifier = Modifier
+                .size(80.dp)
+                .offset(x = maxWidth * 0.35f, y = maxHeight * -0.33f)
+                .dropShadow(shape = CircleShape,
+                    shadow = Shadow(
+                        radius = 7.dp,
+                        offset = DpOffset(x = 0.dp,y= 10.dp),
+                        color = Color(0xFF98C3B3),
+                    )),
+                    contentPadding = PaddingValues(0.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF00999F)
+                ),
                 onClick = {
-                    iseditable.value = true
+                    isReadOnly.value = false
+                    Log.i("ReadOnly","${isReadOnly.value}")
                     focusRequester.requestFocus()
-                    keyboardController?.show()
+                    Log.i("requestFocus","${focusRequester.requestFocus()}")
                 }
             ) {
-                Text("change bg"
+                Text(modifier = Modifier.fillMaxWidth(),
+                   text =  "rename"
                 , textAlign = TextAlign.Center,
-                    autoSize = TextAutoSize.StepBased(
-                        minFontSize = 8.sp,
-                    maxFontSize = 20.sp,
-                    ))
+                    fontSize = 17.sp)
             }
                 BasicTextField(
                     modifier = Modifier
-                        .focusRequester(focusRequester),
+                        .focusRequester(focusRequester)
+                        .combinedClickable(
+                            onDoubleClick = { incramentor() },
+                            interactionSource = null,
+                            indication = null,
+                            onClick = { }
+                        ),
                     textStyle = TextStyle(
                         fontSize = 64.sp,
                         fontFamily = graphitiBackground,
                         textAlign = TextAlign.Center,
-                        color = Color.Black,
+                        color = Color(0xFF09100E).copy(0.35f),
                     ),
-                    enabled =  iseditable.value,
-                    onKeyboardAction = doThis,
+                    readOnly = isReadOnly.value,
                     state = rememberTextFieldState(initialText = "Notes"),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
+                    onKeyboardAction = KeyboardActionHandler {
+                        isReadOnly.value = true
+                    },
+
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 )
 
             listOfComposables.forEach { content ->
                 content()
             }
             Row(
-                modifier = Modifier.fillMaxWidth(0.43f)
+                modifier = Modifier
+                    .fillMaxWidth(0.43f)
                     .fillMaxHeight(0.03f)
-                    .offset(y = maxHeight * 0.9f)
+                    .offset(y = maxHeight * 0.4f)
                     .clip(shape = RoundedCornerShape(percent = 50))
-                    .background(color = Color.LightGray),
+                    .background(color = Color.Transparent),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
 
@@ -163,7 +182,7 @@ contentAlignment = Alignment.Center
                             .fillMaxWidth(0.1f)
                             .clip(shape = CircleShape)
                             .background(
-                                if (index == 0) Color.Green else Color.Black
+                                if (index == 0) Color(0xFF2EB521) else Color.Black
                             )
                     )
                 }
@@ -171,22 +190,41 @@ contentAlignment = Alignment.Center
         }
     }
 
-val graphitiBackground = FontFamily(Font(R.font.permanentmarker_regular))
-@Preview(showBackground = true, showSystemUi = true)
+@Preview
 @Composable
-fun test() {
-    Box(modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center) {
-
-    }
+fun checkButton(){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFFB7D5CA))
+            .combinedClickable(
+                interactionSource = null,
+                indication = null,
+                onClick = { }
+            ),
+        contentAlignment = Alignment.Center
+    ){
+        Button(modifier = Modifier
+            .size(80.dp)
+            .dropShadow(shape = CircleShape,
+                shadow = Shadow(
+                radius = 7.dp,
+                offset = DpOffset(x = 0.dp,y= 10.dp),
+                color = Color(0xFF98C3B3),
+            )),
+            contentPadding = PaddingValues(0.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF00999F)
+            ),
+            onClick = { }
+        ) {
+            Text(modifier = Modifier.fillMaxWidth(),
+                text =  "rename",
+                textAlign = TextAlign.Center,
+                fontSize = 17.sp
+                )
+        }
+        }
 }
-// i dont want it to be editable
-// either button, or/**
-/** read only, or editable, editable is hwole thing untouched i like that
- * no hold, make it on like swipe up maybe? nahh
- */
-// now persist information, on screen change,
-// persist on app close
-// make button look better
 
 
