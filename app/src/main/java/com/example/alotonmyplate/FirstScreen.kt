@@ -67,6 +67,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -75,10 +76,13 @@ import kotlinx.coroutines.android.awaitFrame
 
 @Composable
     fun FirstScreen(navigator: NavController) {
+        val iseditable = remember { mutableStateOf(false) }
         val isReadOnly = remember { mutableStateOf(true) }
         val focusRequester = remember { FocusRequester() }
 
-        val isendOScreen = remember { mutableStateOf(false) }
+    val dading = remember { mutableStateOf(TextFieldValue("")) }
+
+    val isendOScreen = remember { mutableStateOf(false) }
         val listOfComposables = remember {
             mutableStateListOf<@Composable () -> Unit>() }
         val incrament = remember { mutableStateOf(0) }
@@ -112,57 +116,6 @@ import kotlinx.coroutines.android.awaitFrame
 contentAlignment = Alignment.Center
         )
         {
-            Button(modifier = Modifier
-                .size(80.dp)
-                .offset(x = maxWidth * 0.35f, y = maxHeight * -0.33f)
-                .dropShadow(shape = CircleShape,
-                    shadow = Shadow(
-                        radius = 7.dp,
-                        offset = DpOffset(x = 0.dp,y= 10.dp),
-                        color = Color(0xFF98C3B3),
-                    )),
-                    contentPadding = PaddingValues(0.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF264037)
-                ),
-                onClick = {
-                    isReadOnly.value = false
-                    Log.i("ReadOnly","${isReadOnly.value}")
-                    focusRequester.requestFocus()
-                    Log.i("requestFocus","${focusRequester.requestFocus()}")
-                }
-            ) {
-                Text(modifier = Modifier.fillMaxWidth(),
-                   text =  "rename",
-                    fontFamily = graphitiBackground,
-                    color = Color(0xFFEFF5F3)
-                , textAlign = TextAlign.Center,
-                    fontSize = 17.sp)
-            }
-                BasicTextField(
-                    modifier = Modifier
-                        .focusRequester(focusRequester)
-                        .combinedClickable(
-                            onDoubleClick = { incramentor() },
-                            interactionSource = null,
-                            indication = null,
-                            onClick = { }
-                        ),
-                    textStyle = TextStyle(
-                        fontSize = 64.sp,
-                        fontFamily = graphitiBackground,
-                        textAlign = TextAlign.Center,
-                        color = Color(0xFF09100E).copy(0.35f),
-                    ),
-                    readOnly = isReadOnly.value,
-                    state = rememberTextFieldState(initialText = "Notes"),
-                    onKeyboardAction = KeyboardActionHandler {
-                        isReadOnly.value = true
-                    },
-
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                )
-
             listOfComposables.forEach { content ->
                 content()
             }
@@ -230,3 +183,4 @@ fun checkButton(){
 }
 
 
+// keep same functionality see what enabled does

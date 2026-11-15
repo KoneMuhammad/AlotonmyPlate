@@ -90,57 +90,6 @@ fun FourthScreen(navigator: NavController) {
 
     )
     {
-        Button(modifier = Modifier
-            .size(80.dp)
-            .offset(x = maxWidth * 0.35f, y = maxHeight * -0.33f)
-            .dropShadow(shape = CircleShape,
-                shadow = Shadow(
-                    radius = 7.dp,
-                    offset = DpOffset(x = 0.dp,y= 10.dp),
-                    color = Color(0xFF333333),
-                )),
-            contentPadding = PaddingValues(0.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF00999F)
-            ),
-            onClick = {
-                isReadOnly.value = false
-                Log.i("ReadOnly","${isReadOnly.value}")
-                focusRequester.requestFocus()
-                Log.i("requestFocus","${focusRequester.requestFocus()}")
-            }
-        ) {
-            Text(modifier = Modifier.fillMaxWidth(),
-                text =  "rename",
-                fontFamily = graphitiBackground,
-                color = Color(0xFFEEF6F5)
-                , textAlign = TextAlign.Center,
-                fontSize = 17.sp)
-        }
-        BasicTextField(
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .combinedClickable(
-                    onDoubleClick = { incramentor() },
-                    interactionSource = null,
-                    indication = null,
-                    onClick = { }
-                ),
-            textStyle = TextStyle(
-                fontSize = 64.sp,
-                fontFamily = graphitiBackground,
-                textAlign = TextAlign.Center,
-                color = Color(0xFF091110).copy(0.35f),
-            ),
-            readOnly = isReadOnly.value,
-            state = rememberTextFieldState(initialText = "Notes"),
-            onKeyboardAction = KeyboardActionHandler {
-                isReadOnly.value = true
-            },
-
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        )
-
         listOfComposables.forEach { content ->
             content()
 
