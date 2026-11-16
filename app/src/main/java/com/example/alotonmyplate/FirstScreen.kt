@@ -76,11 +76,6 @@ import kotlinx.coroutines.android.awaitFrame
 
 @Composable
     fun FirstScreen(navigator: NavController) {
-        val iseditable = remember { mutableStateOf(false) }
-        val isReadOnly = remember { mutableStateOf(true) }
-        val focusRequester = remember { FocusRequester() }
-
-    val dading = remember { mutableStateOf(TextFieldValue("")) }
 
     val isendOScreen = remember { mutableStateOf(false) }
         val listOfComposables = remember {

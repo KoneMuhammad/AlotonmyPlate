@@ -51,8 +51,6 @@ import com.example.test.add
 
 @Composable
 fun FourthScreen(navigator: NavController) {
-    val isReadOnly = remember { mutableStateOf(true) }
-    val focusRequester = remember { FocusRequester() }
 
     val listOfComposables = remember {
         mutableStateListOf<@Composable () -> Unit>()

@@ -51,11 +51,6 @@ import com.example.test.add
 
 @Composable
 fun SecondScreen(navigator: NavController) {
-
-    val isReadOnly = remember { mutableStateOf(true) }
-    val focusRequester = remember { FocusRequester() }
-
-    val isendOScreen = remember { mutableStateOf(false) }
     val listOfComposables = remember {
         mutableStateListOf<@Composable () -> Unit>()
     }

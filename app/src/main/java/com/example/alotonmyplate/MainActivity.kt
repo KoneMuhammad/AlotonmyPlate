@@ -1,30 +1,36 @@
 package com.example.alotonmyplate
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.alotonmyplate.ui.theme.AlotonmyPlateTheme
-
+import androidx.lifecycle.lifecycleScope
+import androidx.room3.Room
+import androidx.sqlite.driver.AndroidSQLiteDriver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val databaseTalker = Room.databaseBuilder<AppDatabase>(applicationContext, "priority")
+            .setDriver(AndroidSQLiteDriver())
+            .build()
+        val talkToDb = databaseTalker.PriorityFunctions()
+
+        var all_The_Screens_Priorities: List<Priority> = listOf()
+
+        lifecycleScope.launch {
+            all_The_Screens_Priorities =  withContext(Dispatchers.IO){ talkToDb.getAll() }
+        }
+
         enableEdgeToEdge()
         setContent {
-            allScreens()
+            allScreens(talkToDb)
         }
     }
-}
 
+}
