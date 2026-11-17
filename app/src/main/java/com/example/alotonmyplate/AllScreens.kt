@@ -20,20 +20,10 @@ object fourthScreen
 val LocationOnePriority = mutableListOf<Priority>()
 val LocationTwoPriority = mutableListOf<Priority>()
 val LocationThreePriority = mutableListOf<Priority>()
-
-fun store_Priority_Into_SubLists(priorityList: List<Priority>){
-    for (priority in priorityList){
-       when (priority.location){
-           1 -> LocationOnePriority.add(priority)
-           2 -> LocationTwoPriority.add(priority)
-           3 -> LocationThreePriority.add(priority)
-       }
-    }
-}
 @Composable
-fun allScreens(database: PriorityFunctions){
-    val rememberPreviousPriorities = remember { mutableStateOf<List<Priority>>(listOf()) }
-
+fun allScreens(locationOnePriorities: MutableList<Priority>,
+               locationTwoPriorities: MutableList<Priority>,
+               locationThreePriorities: MutableList<Priority>){
     val mover = rememberNavController()
     NavHost(navController = mover, startDestination = firstScreen){
       composable<firstScreen>{

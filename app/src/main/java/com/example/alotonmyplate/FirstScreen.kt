@@ -75,22 +75,35 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.android.awaitFrame
 
 @Composable
-    fun FirstScreen(navigator: NavController) {
-
+    fun FirstScreen(navigator: NavController, fauxList: MutableList<Priority>) {
+    val incrament = remember { mutableStateOf(0) }
     val isendOScreen = remember { mutableStateOf(false) }
-        val listOfComposables = remember {
-            mutableStateListOf<@Composable () -> Unit>() }
-        val incrament = remember { mutableStateOf(0) }
+
+    val listOfComposables = remember {
+        mutableStateListOf<@Composable () -> Unit>() }
+
+//pass each one an index which is soemthing that holds it, he takes that entire element, finds by the index, and updates,
+    // a value in there. good, now how does this conflict to the second screen
+    // the second screen holds a different list and with same reference and it updates that list
+
+    //bad switch case
         fun incramentor() {
-            if (incrament.value == 6) {
-                return;
+            when(incrament.value) {
+                1 -> listOfComposables.add { aPriorityButtonOne() }
+                2 -> listOfComposables.add { aPriorityButtonTwo() }
+                3 -> listOfComposables.add { aPriorityButtonThree()}
+                4 -> listOfComposables.add { aPriorityButtonFour()}
+                5 -> listOfComposables.add { aPriorityButtonFive()}
+                6 -> listOfComposables.add { aPriorityButtonSix()}
             }
             listOfComposables.add { aPriorityButton() }
-            incrament.value++ }
+            incrament.value++
+        }
 
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
+                //mc instructions as it relates to actual code to know
                 .background(color = Color(0xFFB7D5CA))
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures { change, dragAmount ->

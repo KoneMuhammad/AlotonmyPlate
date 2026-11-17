@@ -68,7 +68,7 @@ val boldonse = FontFamily(
 
 
 @Composable
-fun aPriorityButton(){
+fun aPriorityButtonOne(){
     val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val index: MutableState<Int> = remember { mutableStateOf(0) }
@@ -168,16 +168,508 @@ fun aPriorityButton(){
         Spacer(modifier = Modifier.width(5.dp))
     }
 }
-
-@Preview(showBackground = true,)
 @Composable
-fun previewaPriorityButton(){
-    Column(verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.height(300.dp)
-        .width(300.dp)
-        .background(color = Color(0xFFD1E5DC)))
-    {
-        aPriorityButton()
+fun aPriorityButtonTwo(){
+    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+
+    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
+    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+
+    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+    val isShadowElevation = remember { mutableStateOf(false) }
+
+    fun addShadow(): Shadow{
+        if(isShadowElevation.value == true){
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+    fun changeColor() {
+        if (index.value > 2) {
+            index.value = 0
+        }
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
+
+        index.value += 1
+    }
+    Row(
+        modifier = Modifier
+            .offset(
+                {
+                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                        y = mostRecentPointerLocation.value.y.roundToInt())
+                }
+            )
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = addShadow()
+            )
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(0.5f)
+            .fillMaxHeight(0.055f)
+            .background(color = currentRowColor.value)
+            .border(  width = 1.4.dp,
+                color = currentRowBorderColor.value,
+            )
+            .clickable(true, onClick = {keyboardController?.show()}),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.23f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = priority_high,
+                contentDescription = "Exlamation Point",
+                tint = currentIconColor.value
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(priorityName.value, color = Color(0xFF153637),
+            fontFamily = boldonse,
+            fontWeight = FontWeight.Normal,
+            maxLines = 3,
+            softWrap = true,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 6.sp,
+                maxFontSize = 18.sp
+            )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+    }
+}
+@Composable
+fun aPriorityButtonThree(){
+    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+
+    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
+    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+
+    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+    val isShadowElevation = remember { mutableStateOf(false) }
+
+    fun addShadow(): Shadow{
+        if(isShadowElevation.value == true){
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+    fun changeColor() {
+        if (index.value > 2) {
+            index.value = 0
+        }
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
+
+        index.value += 1
+    }
+    Row(
+        modifier = Modifier
+            .offset(
+                {
+                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                        y = mostRecentPointerLocation.value.y.roundToInt())
+                }
+            )
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = addShadow()
+            )
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(0.5f)
+            .fillMaxHeight(0.055f)
+            .background(color = currentRowColor.value)
+            .border(  width = 1.4.dp,
+                color = currentRowBorderColor.value,
+            )
+            .clickable(true, onClick = {keyboardController?.show()}),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.23f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = priority_high,
+                contentDescription = "Exlamation Point",
+                tint = currentIconColor.value
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(priorityName.value, color = Color(0xFF153637),
+            fontFamily = boldonse,
+            fontWeight = FontWeight.Normal,
+            maxLines = 3,
+            softWrap = true,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 6.sp,
+                maxFontSize = 18.sp
+            )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+    }
+}
+@Composable
+fun aPriorityButtonFour(){
+    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+
+    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
+    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+
+    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+    val isShadowElevation = remember { mutableStateOf(false) }
+
+    fun addShadow(): Shadow{
+        if(isShadowElevation.value == true){
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+    fun changeColor() {
+        if (index.value > 2) {
+            index.value = 0
+        }
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
+
+        index.value += 1
+    }
+    Row(
+        modifier = Modifier
+            .offset(
+                {
+                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                        y = mostRecentPointerLocation.value.y.roundToInt())
+                }
+            )
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = addShadow()
+            )
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(0.5f)
+            .fillMaxHeight(0.055f)
+            .background(color = currentRowColor.value)
+            .border(  width = 1.4.dp,
+                color = currentRowBorderColor.value,
+            )
+            .clickable(true, onClick = {keyboardController?.show()}),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.23f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = priority_high,
+                contentDescription = "Exlamation Point",
+                tint = currentIconColor.value
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(priorityName.value, color = Color(0xFF153637),
+            fontFamily = boldonse,
+            fontWeight = FontWeight.Normal,
+            maxLines = 3,
+            softWrap = true,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 6.sp,
+                maxFontSize = 18.sp
+            )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+    }
+}
+@Composable
+fun aPriorityButtonFive(){
+    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+
+    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
+    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+
+    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+    val isShadowElevation = remember { mutableStateOf(false) }
+
+    fun addShadow(): Shadow{
+        if(isShadowElevation.value == true){
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+    fun changeColor() {
+        if (index.value > 2) {
+            index.value = 0
+        }
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
+
+        index.value += 1
+    }
+    Row(
+        modifier = Modifier
+            .offset(
+                {
+                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                        y = mostRecentPointerLocation.value.y.roundToInt())
+                }
+            )
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = addShadow()
+            )
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(0.5f)
+            .fillMaxHeight(0.055f)
+            .background(color = currentRowColor.value)
+            .border(  width = 1.4.dp,
+                color = currentRowBorderColor.value,
+            )
+            .clickable(true, onClick = {keyboardController?.show()}),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.23f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = priority_high,
+                contentDescription = "Exlamation Point",
+                tint = currentIconColor.value
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(priorityName.value, color = Color(0xFF153637),
+            fontFamily = boldonse,
+            fontWeight = FontWeight.Normal,
+            maxLines = 3,
+            softWrap = true,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 6.sp,
+                maxFontSize = 18.sp
+            )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+    }
+}
+@Composable
+fun aPriorityButtonSix(){
+    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+
+    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
+    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+
+    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+    val isShadowElevation = remember { mutableStateOf(false) }
+
+    fun addShadow(): Shadow{
+        if(isShadowElevation.value == true){
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+    fun changeColor() {
+        if (index.value > 2) {
+            index.value = 0
+        }
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
+
+        index.value += 1
+    }
+    Row(
+        modifier = Modifier
+            .offset(
+                {
+                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                        y = mostRecentPointerLocation.value.y.roundToInt())
+                }
+            )
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = addShadow()
+            )
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(0.5f)
+            .fillMaxHeight(0.055f)
+            .background(color = currentRowColor.value)
+            .border(  width = 1.4.dp,
+                color = currentRowBorderColor.value,
+            )
+            .clickable(true, onClick = {keyboardController?.show()}),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.23f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = priority_high,
+                contentDescription = "Exlamation Point",
+                tint = currentIconColor.value
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(priorityName.value, color = Color(0xFF153637),
+            fontFamily = boldonse,
+            fontWeight = FontWeight.Normal,
+            maxLines = 3,
+            softWrap = true,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 6.sp,
+                maxFontSize = 18.sp
+            )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
     }
 }
