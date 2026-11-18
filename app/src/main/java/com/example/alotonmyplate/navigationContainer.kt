@@ -1,8 +1,7 @@
 package com.example.alotonmyplate
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.Serializable
@@ -20,24 +19,26 @@ object fourthScreen
 val LocationOnePriority = mutableListOf<Priority>()
 val LocationTwoPriority = mutableListOf<Priority>()
 val LocationThreePriority = mutableListOf<Priority>()
+val LocationFourPriority = mutableListOf<Priority>()
 @Composable
-fun allScreens(locationOnePriorities: MutableList<Priority>,
-               locationTwoPriorities: MutableList<Priority>,
-               locationThreePriorities: MutableList<Priority>){
+fun navigationContainer(locationOnePriorities: SnapshotStateList<Priority?>,
+               locationTwoPriorities: SnapshotStateList<Priority?>,
+               locationThreePriorities: SnapshotStateList<Priority?>,
+               locationFourPriorities: SnapshotStateList<Priority?>){
+
     val mover = rememberNavController()
     NavHost(navController = mover, startDestination = firstScreen){
       composable<firstScreen>{
-          FirstScreen(mover)
+          FirstScreen(mover,locationOnePriorities)
           }
         composable<secondScreen>{
-            SecondScreen(mover)
+            SecondScreen(mover,locationTwoPriorities)
         }
         composable<thirdScreen>{
-            ThirdScreen(mover)
+            ThirdScreen(mover,locationThreePriorities)
         }
         composable<fourthScreen>{
-            FourthScreen(mover)
+            FourthScreen(mover, locationFourPriorities)
         }
-
         }
     }

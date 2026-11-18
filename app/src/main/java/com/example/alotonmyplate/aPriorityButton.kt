@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,29 +31,39 @@ import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.test.fingerprint
 import com.example.test.imageVector.priority_high
 import kotlin.math.roundToInt
 
@@ -66,12 +80,16 @@ val boldonse = FontFamily(
     Font(resId = R.font.boldonse_regular)
 )
 
-
 @Composable
-fun aPriorityButtonOne(){
-    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
+fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+    val firstPriorityElement = priorityPaent[indexFromParent]
     val keyboardController = LocalSoftwareKeyboardController.current
     val index: MutableState<Int> = remember { mutableStateOf(0) }
+
+    val focusRequest = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    var isEditable by remember { mutableStateOf(false) }
 
     val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
     val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
@@ -79,10 +97,13 @@ fun aPriorityButtonOne(){
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
 
+    var text by rememberSaveable { mutableStateOf("turr") }
+
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
     val isShadowElevation = remember { mutableStateOf(false) }
 
     fun addShadow(): Shadow{
+
         if(isShadowElevation.value == true){
             return Shadow(
                 radius = 10.dp,
@@ -132,7 +153,7 @@ fun aPriorityButtonOne(){
                     mostRecentPointerLocation.value += dragAmount
                 }
             }
-                .fillMaxWidth(0.5f)
+                .fillMaxWidth(0.7f)
             .fillMaxHeight(0.055f)
             .background(color = currentRowColor.value)
             .border(  width = 1.4.dp,
@@ -155,17 +176,129 @@ fun aPriorityButtonOne(){
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Text(priorityName.value, color = Color(0xFF153637),
-            fontFamily = boldonse,
-            fontWeight = FontWeight.Normal,
+        BasicTextField(
+            modifier = Modifier.fillMaxHeight()
+                .focusRequester(focusRequest)
+                .focusable()
+                .clickable(onClick = {
+                    focusRequest.requestFocus()}),
             maxLines = 3,
-            softWrap = true,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = 6.sp,
-                maxFontSize = 18.sp
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                imeAction = ImeAction.Done),
+            value = text,
+            onValueChange = { userText ->
+                text = userText
+                if(firstPriorityElement != null){
+                    firstPriorityElement.name = text
+                }
+            },
+                    textStyle = TextStyle(
+                color = Color(0xFF153637),
+                fontFamily = boldonse,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
             )
         )
         Spacer(modifier = Modifier.width(5.dp))
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.23f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = fingerprint,
+                contentDescription = "Thumb Move",
+                tint = currentIconColor.value
+            )
+        }
+    }
+}
+@Preview
+@Composable
+fun testFinger_print() {
+    Box(modifier = Modifier.fill) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .fillMaxHeight(0.055f)
+                .background(color = currentRowColor.value)
+                .border(
+                    width = 1.4.dp,
+                    color = currentRowBorderColor.value,
+                )
+                .clickable(true, onClick = { keyboardController?.show() }),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier.fillMaxHeight(1f)
+                    .clickable(onClick = { changeColor() })
+                    .fillMaxWidth(0.23f)
+                    .background(color = currentIconContainerColor.value),
+                contentAlignment = Alignment.Center
+            )
+            {
+                Icon(
+                    modifier = Modifier.fillMaxHeight(),
+                    imageVector = priority_high,
+                    contentDescription = "Exlamation Point",
+                    tint = currentIconColor.value
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            BasicTextField(
+                modifier = Modifier.fillMaxHeight()
+                    .focusRequester(focusRequest)
+                    .focusable()
+                    .clickable(onClick = {
+                        focusRequest.requestFocus()
+                    }),
+                maxLines = 3,
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrectEnabled = false,
+                    imeAction = ImeAction.Done
+                ),
+                value = text,
+                onValueChange = { userText ->
+                    text = userText
+                    if (firstPriorityElement != null) {
+                        firstPriorityElement.name = text
+                    }
+                },
+                textStyle = TextStyle(
+                    color = Color(0xFF153637),
+                    fontFamily = boldonse,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
+                )
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Box(
+                modifier = Modifier.fillMaxHeight(1f)
+                    .clickable(onClick = { changeColor() })
+                    .fillMaxWidth(0.23f)
+                    .background(color = currentIconContainerColor.value),
+                contentAlignment = Alignment.Center
+            )
+            {
+                Icon(
+                    modifier = Modifier.fillMaxHeight(),
+                    imageVector = fingerprint,
+                    contentDescription = "Thumb Move",
+                    tint = currentIconColor.value
+                )
+            }
+        }
     }
 }
 @Composable

@@ -13,8 +13,8 @@ import androidx.room3.Update
 @Entity
 data class Priority(
         @PrimaryKey val uid: Int,
-        @ColumnInfo(name = "level") val level: Int,
-        @ColumnInfo(name = "name") val name: String,
+        @ColumnInfo(name = "level") var level: Int,
+        @ColumnInfo(name = "name") var name: String,
         @ColumnInfo(name = "location") val location: Int
 )
 

@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +51,7 @@ import androidx.navigation.NavController
 import com.example.test.add
 
 @Composable
-fun ThirdScreen(navigator: NavController) {
+fun ThirdScreen(navigator: NavController, PriorityListFromSSD: SnapshotStateList<Priority?>) {
 
     val listOfComposables = remember {
         mutableStateListOf<@Composable () -> Unit>()
@@ -61,7 +62,6 @@ fun ThirdScreen(navigator: NavController) {
         if (incrament.value == 6) {
             return;
         }
-        listOfComposables.add { aPriorityButton() }
         incrament.value++
 
     }
