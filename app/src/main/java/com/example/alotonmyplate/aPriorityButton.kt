@@ -51,13 +51,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
@@ -80,30 +85,28 @@ val boldonse = FontFamily(
     Font(resId = R.font.boldonse_regular)
 )
 
+//cleanign up and doing some access optimization ram access
 @Composable
 fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
     val firstPriorityElement = priorityPaent[indexFromParent]
-    val keyboardController = LocalSoftwareKeyboardController.current
+
     val index: MutableState<Int> = remember { mutableStateOf(0) }
-
     val focusRequest = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-
-    var isEditable by remember { mutableStateOf(false) }
-
     val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
     val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-
-    var text by rememberSaveable { mutableStateOf("turr") }
-
+    var text by rememberSaveable { mutableStateOf("Priority") }
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
     val isShadowElevation = remember { mutableStateOf(false) }
+    val textMeasurer = rememberTextMeasurer()
+    var fontSize by remember { mutableStateOf(16.sp) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     fun addShadow(): Shadow{
-
         if(isShadowElevation.value == true){
             return Shadow(
                 radius = 10.dp,
@@ -120,6 +123,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
             )
         }
     }
+
     fun changeColor() {
         if (index.value > 2) {
             index.value = 0
@@ -144,15 +148,6 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                 shape = RoundedCornerShape(percent = 15),
                 shadow = addShadow()
             )
-            .pointerInput(Unit ){
-                detectDragGesturesAfterLongPress(
-                    onDragStart = { isShadowElevation.value = true; },
-                    onDragEnd = {isShadowElevation.value = false}
-                ) {
-                    change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
-                }
-            }
                 .fillMaxWidth(0.7f)
             .fillMaxHeight(0.055f)
             .background(color = currentRowColor.value)
@@ -164,7 +159,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
     ) {
         Box(modifier = Modifier.fillMaxHeight(1f)
             .clickable( onClick = {changeColor() })
-            .fillMaxWidth(0.23f)
+            .fillMaxWidth(0.2f)
             .background(color = currentIconContainerColor.value),
             contentAlignment = Alignment.Center
         )
@@ -177,37 +172,65 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
         Spacer(modifier = Modifier.width(10.dp))
         BasicTextField(
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.7f)
                 .focusRequester(focusRequest)
                 .focusable()
-                .clickable(onClick = {
-                    focusRequest.requestFocus()}),
+                .clickable {
+                    focusRequest.requestFocus()
+                },
             maxLines = 3,
+            singleLine = false,
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
                 keyboardController?.hide()
             },
             keyboardOptions = KeyboardOptions(
                 autoCorrectEnabled = false,
-                imeAction = ImeAction.Done),
+                imeAction = ImeAction.Done
+            ),
             value = text,
             onValueChange = { userText ->
+                val newSize = (16 downTo 11).firstOrNull { size ->
+                    val result = textMeasurer.measure(
+                        text = AnnotatedString(userText),
+                        style = TextStyle(
+                            fontFamily = boldonse,
+                            fontSize = size.sp
+                        ),
+                        constraints = Constraints(
+                            maxWidth = 250,
+                            maxHeight = 150
+                        )
+                    )
+                    !result.hasVisualOverflow
+                } ?: 11
+
+                fontSize = newSize.sp
                 text = userText
-                if(firstPriorityElement != null){
-                    firstPriorityElement.name = text
-                }
+                firstPriorityElement?.name = userText
             },
-                    textStyle = TextStyle(
+            textStyle = TextStyle(
                 color = Color(0xFF153637),
                 fontFamily = boldonse,
                 fontWeight = FontWeight.Normal,
-                fontSize = 18.sp,
+                fontSize = fontSize,
+                lineHeight = 14.sp
             )
         )
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
-            .clickable( onClick = {changeColor() })
-            .fillMaxWidth(0.23f)
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(1f)
             .background(color = currentIconContainerColor.value),
             contentAlignment = Alignment.Center
         )
@@ -220,101 +243,339 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
     }
 }
-@Preview
 @Composable
-fun testFinger_print() {
-    Box(modifier = Modifier.fill) {
-        Row(
+fun aPriorityButtonTwe(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+    val firstPriorityElement = priorityPaent[indexFromParent]
+
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+    val focusRequest = remember { FocusRequester() }
+    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
+    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    var text by rememberSaveable { mutableStateOf("Priority") }
+    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+    val isShadowElevation = remember { mutableStateOf(false) }
+    val textMeasurer = rememberTextMeasurer()
+    var fontSize by remember { mutableStateOf(16.sp) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
+    fun addShadow(): Shadow{
+        if(isShadowElevation.value == true){
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+
+    fun changeColor() {
+        if (index.value > 2) {
+            index.value = 0
+        }
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
+
+        index.value += 1
+    }
+    Row(
+        modifier = Modifier
+            .offset(
+                {
+                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                        y = mostRecentPointerLocation.value.y.roundToInt())
+                }
+            )
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = addShadow()
+            )
+            .fillMaxWidth(0.7f)
+            .fillMaxHeight(0.055f)
+            .background(color = currentRowColor.value)
+            .border(  width = 1.4.dp,
+                color = currentRowBorderColor.value,
+            )
+            .clickable(true, onClick = {keyboardController?.show()}),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.2f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = priority_high,
+                contentDescription = "Exlamation Point",
+                tint = currentIconColor.value
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        BasicTextField(
             modifier = Modifier
+                .fillMaxHeight()
                 .fillMaxWidth(0.7f)
-                .fillMaxHeight(0.055f)
-                .background(color = currentRowColor.value)
-                .border(
-                    width = 1.4.dp,
-                    color = currentRowBorderColor.value,
-                )
-                .clickable(true, onClick = { keyboardController?.show() }),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier.fillMaxHeight(1f)
-                    .clickable(onClick = { changeColor() })
-                    .fillMaxWidth(0.23f)
-                    .background(color = currentIconContainerColor.value),
-                contentAlignment = Alignment.Center
-            )
-            {
-                Icon(
-                    modifier = Modifier.fillMaxHeight(),
-                    imageVector = priority_high,
-                    contentDescription = "Exlamation Point",
-                    tint = currentIconColor.value
-                )
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-            BasicTextField(
-                modifier = Modifier.fillMaxHeight()
-                    .focusRequester(focusRequest)
-                    .focusable()
-                    .clickable(onClick = {
-                        focusRequest.requestFocus()
-                    }),
-                maxLines = 3,
-                keyboardActions = KeyboardActions {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
+                .focusRequester(focusRequest)
+                .focusable()
+                .clickable {
+                    focusRequest.requestFocus()
                 },
-                keyboardOptions = KeyboardOptions(
-                    autoCorrectEnabled = false,
-                    imeAction = ImeAction.Done
-                ),
-                value = text,
-                onValueChange = { userText ->
-                    text = userText
-                    if (firstPriorityElement != null) {
-                        firstPriorityElement.name = text
-                    }
+            maxLines = 3,
+            singleLine = false,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                imeAction = ImeAction.Done
+            ),
+            value = text,
+            onValueChange = { userText ->
+                val newSize = (16 downTo 11).firstOrNull { size ->
+                    val result = textMeasurer.measure(
+                        text = AnnotatedString(userText),
+                        style = TextStyle(
+                            fontFamily = boldonse,
+                            fontSize = size.sp
+                        ),
+                        constraints = Constraints(
+                            maxWidth = 250,
+                            maxHeight = 150
+                        )
+                    )
+                    !result.hasVisualOverflow
+                } ?: 11
+
+                fontSize = newSize.sp
+                text = userText
+                firstPriorityElement?.name = userText
+            },
+            textStyle = TextStyle(
+                color = Color(0xFF153637),
+                fontFamily = boldonse,
+                fontWeight = FontWeight.Normal,
+                fontSize = fontSize,
+                lineHeight = 14.sp
+            )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(1f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = fingerprint,
+                contentDescription = "Thumb Move",
+                tint = currentIconColor.value
+            )
+        }
+    }
+}
+@Composable
+fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+    val firstPriorityElement = priorityPaent[indexFromParent]
+
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+    val focusRequest = remember { FocusRequester() }
+    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
+    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
+    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
+    var text by rememberSaveable { mutableStateOf("Priority") }
+    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+    val isShadowElevation = remember { mutableStateOf(false) }
+    val textMeasurer = rememberTextMeasurer()
+    var fontSize by remember { mutableStateOf(16.sp) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
+    fun addShadow(): Shadow{
+        if(isShadowElevation.value == true){
+            return Shadow(
+                radius = 10.dp,
+                spread = -5.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 20.dp)
+            )
+        } else{
+            return Shadow(
+                radius = 0.dp,
+                spread = 0.dp,
+                color = currentShadowColor.value,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+
+    fun changeColor() {
+        if (index.value > 2) {
+            index.value = 0
+        }
+        currentIconContainerColor.value = iconContainerolors[index.value]
+        currentRowColor.value = rowColors[index.value]
+        currentIconColor.value = iconColors[index.value]
+        currentRowBorderColor.value = rowBorderColors[index.value]
+        currentShadowColor.value = ShadowColors[index.value]
+
+        index.value += 1
+    }
+    Row(
+        modifier = Modifier
+            .offset(
+                {
+                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                        y = mostRecentPointerLocation.value.y.roundToInt())
+                }
+            )
+            .dropShadow(
+                shape = RoundedCornerShape(percent = 15),
+                shadow = addShadow()
+            )
+            .fillMaxWidth(0.7f)
+            .fillMaxHeight(0.055f)
+            .background(color = currentRowColor.value)
+            .border(  width = 1.4.dp,
+                color = currentRowBorderColor.value,
+            )
+            .clickable(true, onClick = {keyboardController?.show()}),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .clickable( onClick = {changeColor() })
+            .fillMaxWidth(0.2f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = priority_high,
+                contentDescription = "Exlamation Point",
+                tint = currentIconColor.value
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        BasicTextField(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.7f)
+                .focusRequester(focusRequest)
+                .focusable()
+                .clickable {
+                    focusRequest.requestFocus()
                 },
-                textStyle = TextStyle(
-                    color = Color(0xFF153637),
-                    fontFamily = boldonse,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
-                )
+            maxLines = 3,
+            singleLine = false,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                imeAction = ImeAction.Done
+            ),
+            value = text,
+            onValueChange = { userText ->
+                val newSize = (16 downTo 11).firstOrNull { size ->
+                    val result = textMeasurer.measure(
+                        text = AnnotatedString(userText),
+                        style = TextStyle(
+                            fontFamily = boldonse,
+                            fontSize = size.sp
+                        ),
+                        constraints = Constraints(
+                            maxWidth = 250,
+                            maxHeight = 150
+                        )
+                    )
+                    !result.hasVisualOverflow
+                } ?: 11
+
+                fontSize = newSize.sp
+                text = userText
+                firstPriorityElement?.name = userText
+            },
+            textStyle = TextStyle(
+                color = Color(0xFF153637),
+                fontFamily = boldonse,
+                fontWeight = FontWeight.Normal,
+                fontSize = fontSize,
+                lineHeight = 14.sp
             )
-            Spacer(modifier = Modifier.width(5.dp))
-            Box(
-                modifier = Modifier.fillMaxHeight(1f)
-                    .clickable(onClick = { changeColor() })
-                    .fillMaxWidth(0.23f)
-                    .background(color = currentIconContainerColor.value),
-                contentAlignment = Alignment.Center
-            )
-            {
-                Icon(
-                    modifier = Modifier.fillMaxHeight(),
-                    imageVector = fingerprint,
-                    contentDescription = "Thumb Move",
-                    tint = currentIconColor.value
-                )
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
             }
+            .fillMaxWidth(1f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = fingerprint,
+                contentDescription = "Thumb Move",
+                tint = currentIconColor.value
+            )
         }
     }
 }
 @Composable
-fun aPriorityButtonTwo(){
-    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val index: MutableState<Int> = remember { mutableStateOf(0) }
+fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+    val firstPriorityElement = priorityPaent[indexFromParent]
 
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+    val focusRequest = remember { FocusRequester() }
     val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
     val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-
+    var text by rememberSaveable { mutableStateOf("Priority") }
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
     val isShadowElevation = remember { mutableStateOf(false) }
+    val textMeasurer = rememberTextMeasurer()
+    var fontSize by remember { mutableStateOf(16.sp) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     fun addShadow(): Shadow{
         if(isShadowElevation.value == true){
@@ -333,6 +594,7 @@ fun aPriorityButtonTwo(){
             )
         }
     }
+
     fun changeColor() {
         if (index.value > 2) {
             index.value = 0
@@ -357,16 +619,7 @@ fun aPriorityButtonTwo(){
                 shape = RoundedCornerShape(percent = 15),
                 shadow = addShadow()
             )
-            .pointerInput(Unit ){
-                detectDragGesturesAfterLongPress(
-                    onDragStart = { isShadowElevation.value = true; },
-                    onDragEnd = {isShadowElevation.value = false}
-                ) {
-                        change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
-                }
-            }
-            .fillMaxWidth(0.5f)
+            .fillMaxWidth(0.7f)
             .fillMaxHeight(0.055f)
             .background(color = currentRowColor.value)
             .border(  width = 1.4.dp,
@@ -377,7 +630,7 @@ fun aPriorityButtonTwo(){
     ) {
         Box(modifier = Modifier.fillMaxHeight(1f)
             .clickable( onClick = {changeColor() })
-            .fillMaxWidth(0.23f)
+            .fillMaxWidth(0.2f)
             .background(color = currentIconContainerColor.value),
             contentAlignment = Alignment.Center
         )
@@ -389,33 +642,97 @@ fun aPriorityButtonTwo(){
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Text(priorityName.value, color = Color(0xFF153637),
-            fontFamily = boldonse,
-            fontWeight = FontWeight.Normal,
+        BasicTextField(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.7f)
+                .focusRequester(focusRequest)
+                .focusable()
+                .clickable {
+                    focusRequest.requestFocus()
+                },
             maxLines = 3,
-            softWrap = true,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = 6.sp,
-                maxFontSize = 18.sp
+            singleLine = false,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                imeAction = ImeAction.Done
+            ),
+            value = text,
+            onValueChange = { userText ->
+                val newSize = (16 downTo 11).firstOrNull { size ->
+                    val result = textMeasurer.measure(
+                        text = AnnotatedString(userText),
+                        style = TextStyle(
+                            fontFamily = boldonse,
+                            fontSize = size.sp
+                        ),
+                        constraints = Constraints(
+                            maxWidth = 250,
+                            maxHeight = 150
+                        )
+                    )
+                    !result.hasVisualOverflow
+                } ?: 11
+
+                fontSize = newSize.sp
+                text = userText
+                firstPriorityElement?.name = userText
+            },
+            textStyle = TextStyle(
+                color = Color(0xFF153637),
+                fontFamily = boldonse,
+                fontWeight = FontWeight.Normal,
+                fontSize = fontSize,
+                lineHeight = 14.sp
             )
         )
         Spacer(modifier = Modifier.width(5.dp))
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(1f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = fingerprint,
+                contentDescription = "Thumb Move",
+                tint = currentIconColor.value
+            )
+        }
     }
 }
 @Composable
-fun aPriorityButtonThree(){
-    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val index: MutableState<Int> = remember { mutableStateOf(0) }
+fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+    val firstPriorityElement = priorityPaent[indexFromParent]
 
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+    val focusRequest = remember { FocusRequester() }
     val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
     val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-
+    var text by rememberSaveable { mutableStateOf("Priority") }
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
     val isShadowElevation = remember { mutableStateOf(false) }
+    val textMeasurer = rememberTextMeasurer()
+    var fontSize by remember { mutableStateOf(16.sp) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     fun addShadow(): Shadow{
         if(isShadowElevation.value == true){
@@ -434,6 +751,7 @@ fun aPriorityButtonThree(){
             )
         }
     }
+
     fun changeColor() {
         if (index.value > 2) {
             index.value = 0
@@ -458,16 +776,7 @@ fun aPriorityButtonThree(){
                 shape = RoundedCornerShape(percent = 15),
                 shadow = addShadow()
             )
-            .pointerInput(Unit ){
-                detectDragGesturesAfterLongPress(
-                    onDragStart = { isShadowElevation.value = true; },
-                    onDragEnd = {isShadowElevation.value = false}
-                ) {
-                        change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
-                }
-            }
-            .fillMaxWidth(0.5f)
+            .fillMaxWidth(0.7f)
             .fillMaxHeight(0.055f)
             .background(color = currentRowColor.value)
             .border(  width = 1.4.dp,
@@ -478,7 +787,7 @@ fun aPriorityButtonThree(){
     ) {
         Box(modifier = Modifier.fillMaxHeight(1f)
             .clickable( onClick = {changeColor() })
-            .fillMaxWidth(0.23f)
+            .fillMaxWidth(0.2f)
             .background(color = currentIconContainerColor.value),
             contentAlignment = Alignment.Center
         )
@@ -490,33 +799,97 @@ fun aPriorityButtonThree(){
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Text(priorityName.value, color = Color(0xFF153637),
-            fontFamily = boldonse,
-            fontWeight = FontWeight.Normal,
+        BasicTextField(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.7f)
+                .focusRequester(focusRequest)
+                .focusable()
+                .clickable {
+                    focusRequest.requestFocus()
+                },
             maxLines = 3,
-            softWrap = true,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = 6.sp,
-                maxFontSize = 18.sp
+            singleLine = false,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                imeAction = ImeAction.Done
+            ),
+            value = text,
+            onValueChange = { userText ->
+                val newSize = (16 downTo 11).firstOrNull { size ->
+                    val result = textMeasurer.measure(
+                        text = AnnotatedString(userText),
+                        style = TextStyle(
+                            fontFamily = boldonse,
+                            fontSize = size.sp
+                        ),
+                        constraints = Constraints(
+                            maxWidth = 250,
+                            maxHeight = 150
+                        )
+                    )
+                    !result.hasVisualOverflow
+                } ?: 11
+
+                fontSize = newSize.sp
+                text = userText
+                firstPriorityElement?.name = userText
+            },
+            textStyle = TextStyle(
+                color = Color(0xFF153637),
+                fontFamily = boldonse,
+                fontWeight = FontWeight.Normal,
+                fontSize = fontSize,
+                lineHeight = 14.sp
             )
         )
         Spacer(modifier = Modifier.width(5.dp))
+        Box(modifier = Modifier.fillMaxHeight(1f)
+            .pointerInput(Unit ){
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { isShadowElevation.value = true; },
+                    onDragEnd = {isShadowElevation.value = false}
+                ) {
+                        change, dragAmount ->
+                    mostRecentPointerLocation.value += dragAmount
+                }
+            }
+            .fillMaxWidth(1f)
+            .background(color = currentIconContainerColor.value),
+            contentAlignment = Alignment.Center
+        )
+        {
+            Icon(modifier = Modifier.fillMaxHeight(),
+                imageVector = fingerprint,
+                contentDescription = "Thumb Move",
+                tint = currentIconColor.value
+            )
+        }
     }
 }
 @Composable
-fun aPriorityButtonFour(){
-    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val index: MutableState<Int> = remember { mutableStateOf(0) }
+fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+    val firstPriorityElement = priorityPaent[indexFromParent]
 
+    val index: MutableState<Int> = remember { mutableStateOf(0) }
+    val focusRequest = remember { FocusRequester() }
     val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
     val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-
+    var text by rememberSaveable { mutableStateOf("Priority") }
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
     val isShadowElevation = remember { mutableStateOf(false) }
+    val textMeasurer = rememberTextMeasurer()
+    var fontSize by remember { mutableStateOf(16.sp) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     fun addShadow(): Shadow{
         if(isShadowElevation.value == true){
@@ -535,6 +908,7 @@ fun aPriorityButtonFour(){
             )
         }
     }
+
     fun changeColor() {
         if (index.value > 2) {
             index.value = 0
@@ -559,16 +933,7 @@ fun aPriorityButtonFour(){
                 shape = RoundedCornerShape(percent = 15),
                 shadow = addShadow()
             )
-            .pointerInput(Unit ){
-                detectDragGesturesAfterLongPress(
-                    onDragStart = { isShadowElevation.value = true; },
-                    onDragEnd = {isShadowElevation.value = false}
-                ) {
-                        change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
-                }
-            }
-            .fillMaxWidth(0.5f)
+            .fillMaxWidth(0.7f)
             .fillMaxHeight(0.055f)
             .background(color = currentRowColor.value)
             .border(  width = 1.4.dp,
@@ -579,7 +944,7 @@ fun aPriorityButtonFour(){
     ) {
         Box(modifier = Modifier.fillMaxHeight(1f)
             .clickable( onClick = {changeColor() })
-            .fillMaxWidth(0.23f)
+            .fillMaxWidth(0.2f)
             .background(color = currentIconContainerColor.value),
             contentAlignment = Alignment.Center
         )
@@ -591,75 +956,56 @@ fun aPriorityButtonFour(){
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Text(priorityName.value, color = Color(0xFF153637),
-            fontFamily = boldonse,
-            fontWeight = FontWeight.Normal,
+        BasicTextField(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.7f)
+                .focusRequester(focusRequest)
+                .focusable()
+                .clickable {
+                    focusRequest.requestFocus()
+                },
             maxLines = 3,
-            softWrap = true,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = 6.sp,
-                maxFontSize = 18.sp
+            singleLine = false,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            },
+            keyboardOptions = KeyboardOptions(
+                autoCorrectEnabled = false,
+                imeAction = ImeAction.Done
+            ),
+            value = text,
+            onValueChange = { userText ->
+                val newSize = (16 downTo 11).firstOrNull { size ->
+                    val result = textMeasurer.measure(
+                        text = AnnotatedString(userText),
+                        style = TextStyle(
+                            fontFamily = boldonse,
+                            fontSize = size.sp
+                        ),
+                        constraints = Constraints(
+                            maxWidth = 250,
+                            maxHeight = 150
+                        )
+                    )
+                    !result.hasVisualOverflow
+                } ?: 11
+
+                fontSize = newSize.sp
+                text = userText
+                firstPriorityElement?.name = userText
+            },
+            textStyle = TextStyle(
+                color = Color(0xFF153637),
+                fontFamily = boldonse,
+                fontWeight = FontWeight.Normal,
+                fontSize = fontSize,
+                lineHeight = 14.sp
             )
         )
         Spacer(modifier = Modifier.width(5.dp))
-    }
-}
-@Composable
-fun aPriorityButtonFive(){
-    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val index: MutableState<Int> = remember { mutableStateOf(0) }
-
-    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
-    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
-    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
-    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
-    val isShadowElevation = remember { mutableStateOf(false) }
-
-    fun addShadow(): Shadow{
-        if(isShadowElevation.value == true){
-            return Shadow(
-                radius = 10.dp,
-                spread = -5.dp,
-                color = currentShadowColor.value,
-                offset = DpOffset(0.dp, 20.dp)
-            )
-        } else{
-            return Shadow(
-                radius = 0.dp,
-                spread = 0.dp,
-                color = currentShadowColor.value,
-                offset = DpOffset(0.dp, 0.dp)
-            )
-        }
-    }
-    fun changeColor() {
-        if (index.value > 2) {
-            index.value = 0
-        }
-        currentIconContainerColor.value = iconContainerolors[index.value]
-        currentRowColor.value = rowColors[index.value]
-        currentIconColor.value = iconColors[index.value]
-        currentRowBorderColor.value = rowBorderColors[index.value]
-        currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
-    }
-    Row(
-        modifier = Modifier
-            .offset(
-                {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
-                }
-            )
-            .dropShadow(
-                shape = RoundedCornerShape(percent = 15),
-                shadow = addShadow()
-            )
+        Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){
                 detectDragGesturesAfterLongPress(
                     onDragStart = { isShadowElevation.value = true; },
@@ -669,140 +1015,16 @@ fun aPriorityButtonFive(){
                     mostRecentPointerLocation.value += dragAmount
                 }
             }
-            .fillMaxWidth(0.5f)
-            .fillMaxHeight(0.055f)
-            .background(color = currentRowColor.value)
-            .border(  width = 1.4.dp,
-                color = currentRowBorderColor.value,
-            )
-            .clickable(true, onClick = {keyboardController?.show()}),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(modifier = Modifier.fillMaxHeight(1f)
-            .clickable( onClick = {changeColor() })
-            .fillMaxWidth(0.23f)
+            .fillMaxWidth(1f)
             .background(color = currentIconContainerColor.value),
             contentAlignment = Alignment.Center
         )
         {
             Icon(modifier = Modifier.fillMaxHeight(),
-                imageVector = priority_high,
-                contentDescription = "Exlamation Point",
+                imageVector = fingerprint,
+                contentDescription = "Thumb Move",
                 tint = currentIconColor.value
             )
         }
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(priorityName.value, color = Color(0xFF153637),
-            fontFamily = boldonse,
-            fontWeight = FontWeight.Normal,
-            maxLines = 3,
-            softWrap = true,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = 6.sp,
-                maxFontSize = 18.sp
-            )
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-    }
-}
-@Composable
-fun aPriorityButtonSix(){
-    val priorityName: MutableState<String> = remember { mutableStateOf("this random text") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val index: MutableState<Int> = remember { mutableStateOf(0) }
-
-    val currentIconContainerColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF00999F)) }
-    val currentRowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
-    val currentIconColor: MutableState<Color> = remember { mutableStateOf(Color(0xFFC9ECED)) }
-    val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-    val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
-
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
-    val isShadowElevation = remember { mutableStateOf(false) }
-
-    fun addShadow(): Shadow{
-        if(isShadowElevation.value == true){
-            return Shadow(
-                radius = 10.dp,
-                spread = -5.dp,
-                color = currentShadowColor.value,
-                offset = DpOffset(0.dp, 20.dp)
-            )
-        } else{
-            return Shadow(
-                radius = 0.dp,
-                spread = 0.dp,
-                color = currentShadowColor.value,
-                offset = DpOffset(0.dp, 0.dp)
-            )
-        }
-    }
-    fun changeColor() {
-        if (index.value > 2) {
-            index.value = 0
-        }
-        currentIconContainerColor.value = iconContainerolors[index.value]
-        currentRowColor.value = rowColors[index.value]
-        currentIconColor.value = iconColors[index.value]
-        currentRowBorderColor.value = rowBorderColors[index.value]
-        currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
-    }
-    Row(
-        modifier = Modifier
-            .offset(
-                {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
-                }
-            )
-            .dropShadow(
-                shape = RoundedCornerShape(percent = 15),
-                shadow = addShadow()
-            )
-            .pointerInput(Unit ){
-                detectDragGesturesAfterLongPress(
-                    onDragStart = { isShadowElevation.value = true; },
-                    onDragEnd = {isShadowElevation.value = false}
-                ) {
-                        change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
-                }
-            }
-            .fillMaxWidth(0.5f)
-            .fillMaxHeight(0.055f)
-            .background(color = currentRowColor.value)
-            .border(  width = 1.4.dp,
-                color = currentRowBorderColor.value,
-            )
-            .clickable(true, onClick = {keyboardController?.show()}),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(modifier = Modifier.fillMaxHeight(1f)
-            .clickable( onClick = {changeColor() })
-            .fillMaxWidth(0.23f)
-            .background(color = currentIconContainerColor.value),
-            contentAlignment = Alignment.Center
-        )
-        {
-            Icon(modifier = Modifier.fillMaxHeight(),
-                imageVector = priority_high,
-                contentDescription = "Exlamation Point",
-                tint = currentIconColor.value
-            )
-        }
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(priorityName.value, color = Color(0xFF153637),
-            fontFamily = boldonse,
-            fontWeight = FontWeight.Normal,
-            maxLines = 3,
-            softWrap = true,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = 6.sp,
-                maxFontSize = 18.sp
-            )
-        )
-        Spacer(modifier = Modifier.width(5.dp))
     }
 }
