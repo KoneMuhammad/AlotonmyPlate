@@ -76,9 +76,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     var text by rememberSaveable { mutableStateOf("Priority") }
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
 
-    // no offsets but they were there or y and x lets do y and x
     val isShadowElevation = remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
     var fontSize by remember { mutableStateOf(16.sp) }
@@ -120,8 +118,8 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         modifier = Modifier
             .offset(
             {
-                IntOffset(x = priorityElement?.x.roundToInt(),
-                    y = mostRecentPointerLocation.value.y.roundToInt())
+                IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
+                    y = priorityElement?.y?.roundToInt() ?: 0)
             }
         )
             .dropShadow(
@@ -227,7 +225,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 }
 @Composable
 fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
-    val firstPriorityElement = priorityPaent[indexFromParent]
+    val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -237,7 +235,7 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     var text by rememberSaveable { mutableStateOf("Priority") }
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+
     val isShadowElevation = remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
     var fontSize by remember { mutableStateOf(16.sp) }
@@ -279,8 +277,8 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
+                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
+                        y = priorityElement?.y?.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -348,7 +346,7 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 
                 fontSize = newSize.sp
                 text = userText
-                firstPriorityElement?.name = userText
+                priorityElement?.name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -366,7 +364,9 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
+                    priorityElement?.x += dragAmount.x
+                    priorityElement?.y += dragAmount.y
+
                 }
             }
             .fillMaxWidth(1f)
@@ -384,7 +384,7 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 }
 @Composable
 fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
-    val firstPriorityElement = priorityPaent[indexFromParent]
+    val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -394,7 +394,7 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     var text by rememberSaveable { mutableStateOf("Priority") }
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+
     val isShadowElevation = remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
     var fontSize by remember { mutableStateOf(16.sp) }
@@ -436,8 +436,8 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
+                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
+                        y = priorityElement?.y?.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -505,7 +505,7 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
 
                 fontSize = newSize.sp
                 text = userText
-                firstPriorityElement?.name = userText
+                priorityElement?.name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -523,7 +523,9 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
+                    priorityElement?.x += dragAmount.x
+                    priorityElement?.y += dragAmount.y
+
                 }
             }
             .fillMaxWidth(1f)
@@ -541,7 +543,7 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
 }
 @Composable
 fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
-    val firstPriorityElement = priorityPaent[indexFromParent]
+    val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -551,7 +553,7 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     var text by rememberSaveable { mutableStateOf("Priority") }
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+
     val isShadowElevation = remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
     var fontSize by remember { mutableStateOf(16.sp) }
@@ -593,8 +595,8 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
+                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
+                        y = priorityElement?.y?.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -662,7 +664,7 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
 
                 fontSize = newSize.sp
                 text = userText
-                firstPriorityElement?.name = userText
+                priorityElement?.name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -680,7 +682,9 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
+                    priorityElement?.x += dragAmount.x
+                    priorityElement?.y += dragAmount.y
+
                 }
             }
             .fillMaxWidth(1f)
@@ -698,7 +702,7 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
 }
 @Composable
 fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
-    val firstPriorityElement = priorityPaent[indexFromParent]
+    val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -708,7 +712,7 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     var text by rememberSaveable { mutableStateOf("Priority") }
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+
     val isShadowElevation = remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
     var fontSize by remember { mutableStateOf(16.sp) }
@@ -750,8 +754,8 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
+                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
+                        y = priorityElement?.y?.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -819,7 +823,7 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
 
                 fontSize = newSize.sp
                 text = userText
-                firstPriorityElement?.name = userText
+                priorityElement?.name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -837,7 +841,9 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
+                    priorityElement?.x += dragAmount.x
+                    priorityElement?.y += dragAmount.y
+
                 }
             }
             .fillMaxWidth(1f)
@@ -855,7 +861,7 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
 }
 @Composable
 fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
-    val firstPriorityElement = priorityPaent[indexFromParent]
+    val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -865,7 +871,7 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
     val currentRowBorderColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     var text by rememberSaveable { mutableStateOf("Priority") }
-    val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+
     val isShadowElevation = remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
     var fontSize by remember { mutableStateOf(16.sp) }
@@ -907,8 +913,8 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
-                        y = mostRecentPointerLocation.value.y.roundToInt())
+                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
+                        y = priorityElement?.y?.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -976,7 +982,7 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 
                 fontSize = newSize.sp
                 text = userText
-                firstPriorityElement?.name = userText
+                priorityElement?.name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -994,7 +1000,9 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
+                    priorityElement?.x += dragAmount.x
+                    priorityElement?.y += dragAmount.y
+
                 }
             }
             .fillMaxWidth(1f)
@@ -1010,3 +1018,4 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
     }
 }
+
