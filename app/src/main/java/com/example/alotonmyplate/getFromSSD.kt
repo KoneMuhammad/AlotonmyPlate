@@ -15,7 +15,9 @@ data class Priority(
         @PrimaryKey val uid: Int,
         @ColumnInfo(name = "level") var level: Int,
         @ColumnInfo(name = "name") var name: String,
-        @ColumnInfo(name = "location") val location: Int
+        @ColumnInfo(name = "location") val location: Int,
+        @ColumnInfo(name = "x") var x: Float,
+        @ColumnInfo(name = "y") var y: Float,
 )
 
 @Dao

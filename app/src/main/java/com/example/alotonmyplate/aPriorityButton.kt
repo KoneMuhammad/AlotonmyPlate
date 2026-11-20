@@ -1,34 +1,22 @@
 package com.example.alotonmyplate
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.ShapeDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -39,19 +27,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -59,11 +42,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -84,11 +64,9 @@ val ShadowColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Col
 val boldonse = FontFamily(
     Font(resId = R.font.boldonse_regular)
 )
-
-//cleanign up and doing some access optimization ram access
 @Composable
 fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
-    val firstPriorityElement = priorityPaent[indexFromParent]
+    val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -99,6 +77,8 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
     val currentShadowColor: MutableState<Color> = remember { mutableStateOf(Color(0xFF153637)) }
     var text by rememberSaveable { mutableStateOf("Priority") }
     val mostRecentPointerLocation = remember { mutableStateOf<Offset>(Offset.Zero) }
+
+    // no offsets but they were there or y and x lets do y and x
     val isShadowElevation = remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
     var fontSize by remember { mutableStateOf(16.sp) }
@@ -140,7 +120,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         modifier = Modifier
             .offset(
             {
-                IntOffset(x = mostRecentPointerLocation.value.x.roundToInt(),
+                IntOffset(x = priorityElement?.x.roundToInt(),
                     y = mostRecentPointerLocation.value.y.roundToInt())
             }
         )
@@ -209,7 +189,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 
                 fontSize = newSize.sp
                 text = userText
-                firstPriorityElement?.name = userText
+                priorityElement?.name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -227,7 +207,9 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    mostRecentPointerLocation.value += dragAmount
+                    priorityElement?.x += dragAmount.x
+                    priorityElement?.y += dragAmount.y
+
                 }
             }
             .fillMaxWidth(1f)
@@ -244,7 +226,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
     }
 }
 @Composable
-fun aPriorityButtonTwe(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
     val firstPriorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
