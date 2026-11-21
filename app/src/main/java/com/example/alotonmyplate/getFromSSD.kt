@@ -16,10 +16,10 @@ data class Priority(
         @ColumnInfo(name = "level") var level: Int,
         @ColumnInfo(name = "name") var name: String,
         @ColumnInfo(name = "location") val location: Int,
+        @ColumnInfo(name = "count") val count: Int,
         @ColumnInfo(name = "x") var x: Float,
         @ColumnInfo(name = "y") var y: Float,
 )
-
 @Dao
 interface PriorityFunctions {
         @Query("SELECT * FROM Priority")
@@ -35,7 +35,7 @@ interface PriorityFunctions {
         suspend fun delete(priorities: List<Priority>)
 }
 
-@Database(entities = [Priority::class], version = 1)
+@Database(entities = [Priority::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
         abstract fun PriorityFunctions(): PriorityFunctions
 }

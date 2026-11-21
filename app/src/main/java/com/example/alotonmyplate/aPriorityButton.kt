@@ -65,7 +65,7 @@ val boldonse = FontFamily(
     Font(resId = R.font.boldonse_regular)
 )
 @Composable
-fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
     val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
@@ -197,6 +197,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                 lineHeight = 14.sp
             )
         )
+        /
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){
@@ -205,9 +206,8 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityElement?.x += dragAmount.x
-                    priorityElement?.y += dragAmount.y
-
+                    priorityElement?.x = (priorityElement.x) + dragAmount.x
+                    priorityElement?.y = (priorityElement.y) + dragAmount.y
                 }
             }
             .fillMaxWidth(1f)
@@ -223,8 +223,9 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
     }
 }
+
 @Composable
-fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
     val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
@@ -382,8 +383,9 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
     }
 }
+
 @Composable
-fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
     val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
@@ -541,8 +543,9 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
         }
     }
 }
+
 @Composable
-fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
     val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
@@ -700,8 +703,9 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         }
     }
 }
+
 @Composable
-fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
     val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
@@ -859,8 +863,9 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         }
     }
 }
+
 @Composable
-fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority?>){
+fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
     val priorityElement = priorityPaent[indexFromParent]
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
@@ -1018,4 +1023,5 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
     }
 }
+
 

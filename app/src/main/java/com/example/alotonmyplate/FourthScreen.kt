@@ -51,7 +51,7 @@ import androidx.navigation.NavController
 import com.example.test.add
 
 @Composable
-fun FourthScreen(navigator: NavController, PriorityListFromSSD: SnapshotStateList<Priority?>) {
+fun FourthScreen(navigator: NavController, PriorityListFromSSD: SnapshotStateList<Priority>) {
 
     val listOfComposables = remember {
         mutableStateListOf<@Composable () -> Unit>()

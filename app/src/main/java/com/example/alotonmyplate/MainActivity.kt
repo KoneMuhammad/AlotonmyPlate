@@ -40,18 +40,10 @@ class MainActivity : ComponentActivity(){
 
         enableEdgeToEdge()
         setContent {
-            val firstScreenPriorityState = remember { mutableStateListOf<Priority?>().apply {
-                addAll(List(6) { null })
-            } }
-            val secondScreenPriorityState = remember { mutableStateListOf<Priority?>().apply {
-                addAll(List(6) { null })
-            } }
-            val thirdScreenPriorityState = remember { mutableStateListOf<Priority?>().apply {
-                addAll(List(6) { null })
-            } }
-            val fourthScreenPriorityState = remember { mutableStateListOf<Priority?>().apply {
-                addAll(List(6) { null })
-            } }
+            val firstScreenPriorityState = remember { mutableStateListOf<Priority>() }
+            val secondScreenPriorityState = remember { mutableStateListOf<Priority>()}
+            val thirdScreenPriorityState = remember { mutableStateListOf<Priority>() }
+            val fourthScreenPriorityState = remember { mutableStateListOf<Priority>()}
 
             LaunchedEffect(Unit) {
                 all_The_Screens_Priorities = withContext(Dispatchers.IO){ talkToDb.getAll() }
@@ -64,12 +56,13 @@ class MainActivity : ComponentActivity(){
                         2 -> secondScreenPriorityState.add(priority)
                         3 -> thirdScreenPriorityState.add(priority)
                         4 -> fourthScreenPriorityState.add(priority)
-
                     }
                 }
             }
-
             navigationContainer(firstScreenPriorityState, secondScreenPriorityState,thirdScreenPriorityState, fourthScreenPriorityState)
         }
     }
 }
+// data is initially null, find a way to populate it so i can read it and write to it
+// putting that inside in the firs tplace fromt he ssd i need to sort it form top to bottom
+// so the actual ui elements can access their correct elemenets with ease

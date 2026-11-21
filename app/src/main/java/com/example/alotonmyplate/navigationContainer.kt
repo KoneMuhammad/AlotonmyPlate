@@ -21,10 +21,10 @@ val LocationTwoPriority = mutableListOf<Priority>()
 val LocationThreePriority = mutableListOf<Priority>()
 val LocationFourPriority = mutableListOf<Priority>()
 @Composable
-fun navigationContainer(locationOnePriorities: SnapshotStateList<Priority?>,
-               locationTwoPriorities: SnapshotStateList<Priority?>,
-               locationThreePriorities: SnapshotStateList<Priority?>,
-               locationFourPriorities: SnapshotStateList<Priority?>){
+fun navigationContainer(locationOnePriorities: SnapshotStateList<Priority>,
+               locationTwoPriorities: SnapshotStateList<Priority>,
+               locationThreePriorities: SnapshotStateList<Priority>,
+               locationFourPriorities: SnapshotStateList<Priority>){
 
     val mover = rememberNavController()
     NavHost(navController = mover, startDestination = firstScreen){
