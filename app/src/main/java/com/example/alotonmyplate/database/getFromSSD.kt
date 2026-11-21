@@ -1,4 +1,4 @@
-package com.example.alotonmyplate
+package com.example.alotonmyplate.database
 
 import androidx.room3.ColumnInfo
 import androidx.room3.Dao

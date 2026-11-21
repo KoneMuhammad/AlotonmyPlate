@@ -1,6 +1,6 @@
 @file:JvmName("FirstScreenKt")
 
-package com.example.alotonmyplate
+package com.example.alotonmyplate.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -38,14 +38,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.alotonmyplate.ui.aPriorityButtonFive
+import com.example.alotonmyplate.ui.aPriorityButtonFour
+import com.example.alotonmyplate.ui.aPriorityButtonOne
+import com.example.alotonmyplate.ui.aPriorityButtonSix
+import com.example.alotonmyplate.ui.aPriorityButtonThree
+import com.example.alotonmyplate.ui.aPriorityButtonTwo
+import com.example.alotonmyplate.database.Priority
+
 
 @Composable
     fun FirstScreen(navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
 
-        prioritiesForUi.forEach {
-            firstone ->
-            prioritiesForUi
+        prioritiesForUi.forEachIndexed { index, priority ->
+            val nextELement = prioritiesForUi[index + 1]
+            if(priority.count > nextELement.count){
+                prioritiesForUi[index] = nextELement
+                prioritiesForUi[index + 1] = priority
+            }
         }
+
 
     val incrament = remember { mutableStateOf(0) }
     val isendOScreen = remember { mutableStateOf(false) }
@@ -56,17 +68,23 @@ import androidx.compose.ui.unit.sp
         fun incramentor() {
             when(incrament.value) {
                 1 -> listOfComposables.add { index ->
-                    aPriorityButtonOne(index ,prioritiesForUi)}
+                    aPriorityButtonOne(index, prioritiesForUi)
+                }
                 2 -> listOfComposables.add { index ->
-                    aPriorityButtonTwo(index ,prioritiesForUi)}
+                    aPriorityButtonTwo(index, prioritiesForUi)
+                }
                 3 -> listOfComposables.add {index ->
-                    aPriorityButtonThree(index ,prioritiesForUi)}
+                    aPriorityButtonThree(index, prioritiesForUi)
+                }
                 4 -> listOfComposables.add {index ->
-                    aPriorityButtonFour(index ,prioritiesForUi)}
+                    aPriorityButtonFour(index, prioritiesForUi)
+                }
                 5 -> listOfComposables.add { index ->
-                    aPriorityButtonFive(index ,prioritiesForUi)}
+                    aPriorityButtonFive(index, prioritiesForUi)
+                }
                 6 -> listOfComposables.add { index ->
-                    aPriorityButtonSix(index ,prioritiesForUi)}
+                    aPriorityButtonSix(index, prioritiesForUi)
+                }
             }
 
             incrament.value++

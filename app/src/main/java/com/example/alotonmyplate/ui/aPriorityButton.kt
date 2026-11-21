@@ -1,4 +1,4 @@
-package com.example.alotonmyplate
+package com.example.alotonmyplate.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,7 +31,6 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
@@ -48,6 +47,8 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.alotonmyplate.R
+import com.example.alotonmyplate.database.Priority
 import com.example.test.fingerprint
 import com.example.test.imageVector.priority_high
 import kotlin.math.roundToInt
@@ -197,7 +198,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                 lineHeight = 14.sp
             )
         )
-        /
+
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){

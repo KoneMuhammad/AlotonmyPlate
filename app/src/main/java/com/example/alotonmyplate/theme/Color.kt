@@ -1,4 +1,4 @@
-package com.example.alotonmyplate.ui.theme
+package com.example.alotonmyplate.theme
 
 import androidx.compose.ui.graphics.Color
 

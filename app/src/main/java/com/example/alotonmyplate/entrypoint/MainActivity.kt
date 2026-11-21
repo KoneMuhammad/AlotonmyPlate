@@ -1,4 +1,4 @@
-package com.example.alotonmyplate
+package com.example.alotonmyplate.entrypoint
 
 import android.os.Bundle
 import android.util.Log
@@ -7,14 +7,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.lifecycle.lifecycleScope
 import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
+import com.example.alotonmyplate.database.AppDatabase
+import com.example.alotonmyplate.ui.screens.LocationFourPriority
+import com.example.alotonmyplate.ui.screens.LocationOnePriority
+import com.example.alotonmyplate.ui.screens.LocationThreePriority
+import com.example.alotonmyplate.ui.screens.LocationTwoPriority
+import com.example.alotonmyplate.database.Priority
+import com.example.alotonmyplate.ui.screens.navigationContainer
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 fun store_Priority_Into_SubLists(priorityList: List<Priority>){
@@ -59,7 +62,12 @@ class MainActivity : ComponentActivity(){
                     }
                 }
             }
-            navigationContainer(firstScreenPriorityState, secondScreenPriorityState,thirdScreenPriorityState, fourthScreenPriorityState)
+            navigationContainer(
+                firstScreenPriorityState,
+                secondScreenPriorityState,
+                thirdScreenPriorityState,
+                fourthScreenPriorityState
+            )
         }
     }
 }
