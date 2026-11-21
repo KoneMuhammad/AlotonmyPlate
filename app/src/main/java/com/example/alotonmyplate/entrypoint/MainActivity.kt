@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
@@ -43,10 +44,19 @@ class MainActivity : ComponentActivity(){
 
         enableEdgeToEdge()
         setContent {
+            val isSaveTrue = remember { mutableStateOf(false) }
+
+
+            if(isSaveTrue.value == true){
+                LaunchedEffect(Unit) {
+                    withContext(Dispatchers.IO){ talkToDb.updateDatabase()}
+                }
+            }
             val firstScreenPriorityState = remember { mutableStateListOf<Priority>() }
             val secondScreenPriorityState = remember { mutableStateListOf<Priority>()}
             val thirdScreenPriorityState = remember { mutableStateListOf<Priority>() }
             val fourthScreenPriorityState = remember { mutableStateListOf<Priority>()}
+
 
             LaunchedEffect(Unit) {
                 all_The_Screens_Priorities = withContext(Dispatchers.IO){ talkToDb.getAll() }
@@ -62,6 +72,7 @@ class MainActivity : ComponentActivity(){
                     }
                 }
             }
+            //move this to only on oncreate, then on set content
             navigationContainer(
                 firstScreenPriorityState,
                 secondScreenPriorityState,
@@ -71,6 +82,3 @@ class MainActivity : ComponentActivity(){
         }
     }
 }
-// data is initially null, find a way to populate it so i can read it and write to it
-// putting that inside in the firs tplace fromt he ssd i need to sort it form top to bottom
-// so the actual ui elements can access their correct elemenets with ease

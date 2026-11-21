@@ -9,6 +9,7 @@ import androidx.room3.PrimaryKey
 import androidx.room3.Query
 import androidx.room3.RoomDatabase
 import androidx.room3.Update
+import androidx.room3.Upsert
 
 @Entity
 data class Priority(
@@ -28,8 +29,8 @@ interface PriorityFunctions {
         @Query("SELECT * FROM Priority WHERE location IN (:location)")
         suspend fun getByLocation(location: Int): List<Priority>
 
-        @Update
-        suspend fun updateAll(priorities: List<Priority>)
+        @Upsert
+        suspend fun updateDatabase(priorities: List<Priority>)
 
         @Delete
         suspend fun delete(priorities: List<Priority>)
