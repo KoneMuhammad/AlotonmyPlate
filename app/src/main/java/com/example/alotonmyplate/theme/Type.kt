@@ -32,3 +32,12 @@ val Typography = Typography(
     )
     */
 )
+fun writecode(){
+    var somethng = 22
+    var alu = DEFAULT_BUFFER_SIZE
+    if (somethng > alu){
+        // the result
+        //if true jump to this instructon
+    }
+}
+

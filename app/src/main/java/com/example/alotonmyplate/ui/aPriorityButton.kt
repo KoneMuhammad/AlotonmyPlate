@@ -51,6 +51,7 @@ import com.example.alotonmyplate.R
 import com.example.alotonmyplate.database.Priority
 import com.example.test.fingerprint
 import com.example.test.imageVector.priority_high
+import java.util.random.RandomGenerator
 import kotlin.math.roundToInt
 
 val iconContainerolors: Array<Color> = arrayOf(Color(0xFF00999F),Color(0xFFB88000),Color(0xFFA61113))
@@ -66,8 +67,7 @@ val boldonse = FontFamily(
     Font(resId = R.font.boldonse_regular)
 )
 @Composable
-fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
-    val priorityElement = priorityPaent[indexFromParent]
+fun aPriorityButtonOne(indexFromParent: Int, priorityarray: SnapshotStateList<Priority>){
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -119,8 +119,8 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         modifier = Modifier
             .offset(
             {
-                IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
-                    y = priorityElement?.y?.roundToInt() ?: 0)
+                IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
+                    y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
             }
         )
             .dropShadow(
@@ -188,7 +188,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 
                 fontSize = newSize.sp
                 text = userText
-                priorityElement?.name = userText
+                priorityarray[indexFromParent].name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -207,8 +207,8 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityElement?.x = (priorityElement.x) + dragAmount.x
-                    priorityElement?.y = (priorityElement.y) + dragAmount.y
+                    priorityarray[indexFromParent].x += dragAmount.x
+                    priorityarray[indexFromParent].y += dragAmount.y
                 }
             }
             .fillMaxWidth(1f)
@@ -226,8 +226,7 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 }
 
 @Composable
-fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
-    val priorityElement = priorityPaent[indexFromParent]
+fun aPriorityButtonTwo(indexFromParent: Int, priorityarray: SnapshotStateList<Priority>){
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -279,8 +278,8 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
-                        y = priorityElement?.y?.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
+                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -348,7 +347,7 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 
                 fontSize = newSize.sp
                 text = userText
-                priorityElement?.name = userText
+                priorityarray[indexFromParent].name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -358,6 +357,7 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                 lineHeight = 14.sp
             )
         )
+
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){
@@ -366,9 +366,8 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityElement?.x += dragAmount.x
-                    priorityElement?.y += dragAmount.y
-
+                    priorityarray[indexFromParent].x += dragAmount.x
+                    priorityarray[indexFromParent].y += dragAmount.y
                 }
             }
             .fillMaxWidth(1f)
@@ -384,10 +383,8 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
     }
 }
-
 @Composable
-fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
-    val priorityElement = priorityPaent[indexFromParent]
+fun aPriorityButtonThree(indexFromParent: Int, priorityarray: SnapshotStateList<Priority>){
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -439,8 +436,8 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
-                        y = priorityElement?.y?.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
+                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -508,7 +505,7 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
 
                 fontSize = newSize.sp
                 text = userText
-                priorityElement?.name = userText
+                priorityarray[indexFromParent].name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -518,6 +515,7 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
                 lineHeight = 14.sp
             )
         )
+
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){
@@ -526,9 +524,8 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityElement?.x += dragAmount.x
-                    priorityElement?.y += dragAmount.y
-
+                    priorityarray[indexFromParent].x += dragAmount.x
+                    priorityarray[indexFromParent].y += dragAmount.y
                 }
             }
             .fillMaxWidth(1f)
@@ -544,10 +541,8 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityPaent: SnapshotStateList<
         }
     }
 }
-
 @Composable
-fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
-    val priorityElement = priorityPaent[indexFromParent]
+fun aPriorityButtonFour(indexFromParent: Int, priorityarray: SnapshotStateList<Priority>){
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -599,8 +594,8 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
-                        y = priorityElement?.y?.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
+                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -668,7 +663,7 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
 
                 fontSize = newSize.sp
                 text = userText
-                priorityElement?.name = userText
+                priorityarray[indexFromParent].name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -678,6 +673,7 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
                 lineHeight = 14.sp
             )
         )
+
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){
@@ -686,9 +682,8 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityElement?.x += dragAmount.x
-                    priorityElement?.y += dragAmount.y
-
+                    priorityarray[indexFromParent].x += dragAmount.x
+                    priorityarray[indexFromParent].y += dragAmount.y
                 }
             }
             .fillMaxWidth(1f)
@@ -704,10 +699,8 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         }
     }
 }
-
 @Composable
-fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
-    val priorityElement = priorityPaent[indexFromParent]
+fun aPriorityButtonFive(indexFromParent: Int, priorityarray: SnapshotStateList<Priority>){
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -759,8 +752,8 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
-                        y = priorityElement?.y?.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
+                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -828,7 +821,7 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
 
                 fontSize = newSize.sp
                 text = userText
-                priorityElement?.name = userText
+                priorityarray[indexFromParent].name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -838,6 +831,7 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
                 lineHeight = 14.sp
             )
         )
+
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){
@@ -846,9 +840,8 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityElement?.x += dragAmount.x
-                    priorityElement?.y += dragAmount.y
-
+                    priorityarray[indexFromParent].x += dragAmount.x
+                    priorityarray[indexFromParent].y += dragAmount.y
                 }
             }
             .fillMaxWidth(1f)
@@ -864,10 +857,8 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityPaent: SnapshotStateList<P
         }
     }
 }
-
 @Composable
-fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Priority>){
-    val priorityElement = priorityPaent[indexFromParent]
+fun aPriorityButtonSix(indexFromParent: Int, priorityarray: SnapshotStateList<Priority>){
 
     val index: MutableState<Int> = remember { mutableStateOf(0) }
     val focusRequest = remember { FocusRequester() }
@@ -919,8 +910,8 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityElement?.x?.roundToInt() ?: 0,
-                        y = priorityElement?.y?.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
+                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
                 }
             )
             .dropShadow(
@@ -988,7 +979,7 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
 
                 fontSize = newSize.sp
                 text = userText
-                priorityElement?.name = userText
+                priorityarray[indexFromParent].name = userText
             },
             textStyle = TextStyle(
                 color = Color(0xFF153637),
@@ -998,6 +989,7 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                 lineHeight = 14.sp
             )
         )
+
         Spacer(modifier = Modifier.width(5.dp))
         Box(modifier = Modifier.fillMaxHeight(1f)
             .pointerInput(Unit ){
@@ -1006,9 +998,8 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityElement?.x += dragAmount.x
-                    priorityElement?.y += dragAmount.y
-
+                    priorityarray[indexFromParent].x += dragAmount.x
+                    priorityarray[indexFromParent].y += dragAmount.y
                 }
             }
             .fillMaxWidth(1f)
@@ -1024,5 +1015,3 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityPaent: SnapshotStateList<Pr
         }
     }
 }
-
-

@@ -45,19 +45,12 @@ import com.example.alotonmyplate.ui.aPriorityButtonSix
 import com.example.alotonmyplate.ui.aPriorityButtonThree
 import com.example.alotonmyplate.ui.aPriorityButtonTwo
 import com.example.alotonmyplate.database.Priority
-
-
 @Composable
     fun FirstScreen(navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
 
-        prioritiesForUi.forEachIndexed { index, priority ->
-            val nextELement = prioritiesForUi[index + 1]
-            if(priority.count > nextELement.count){
-                prioritiesForUi[index] = nextELement
-                prioritiesForUi[index + 1] = priority
-            }
+        if(prioritiesForUi.size != 0 && prioritiesForUi.size != 1) {
+            prioritiesForUi.sortBy { it.count }
         }
-
 
     val incrament = remember { mutableStateOf(0) }
     val isendOScreen = remember { mutableStateOf(false) }
@@ -66,30 +59,53 @@ import com.example.alotonmyplate.database.Priority
         mutableStateListOf<@Composable (index: Int) -> Unit>() }
 
         fun incramentor() {
-            when(incrament.value) {
-                1 -> listOfComposables.add { index ->
-                    aPriorityButtonOne(index, prioritiesForUi)
-                }
-                2 -> listOfComposables.add { index ->
-                    aPriorityButtonTwo(index, prioritiesForUi)
-                }
-                3 -> listOfComposables.add {index ->
-                    aPriorityButtonThree(index, prioritiesForUi)
-                }
-                4 -> listOfComposables.add {index ->
-                    aPriorityButtonFour(index, prioritiesForUi)
-                }
-                5 -> listOfComposables.add { index ->
-                    aPriorityButtonFive(index, prioritiesForUi)
-                }
-                6 -> listOfComposables.add { index ->
-                    aPriorityButtonSix(index, prioritiesForUi)
+            if (incrament.value <= 6) {
+                incrament.value++
+                when (incrament.value) {
+                    1 -> listOfComposables.add { index ->
+                        if(prioritiesForUi.size == 0){
+                            prioritiesForUi.add(Priority(name = "", location = 1, count = 1, x = 0f, y = 0f))
+                        }
+                        aPriorityButtonOne(index, prioritiesForUi)
+                    }
+
+                    2 -> listOfComposables.add { index ->
+                        if(prioritiesForUi.size == 1){
+                            prioritiesForUi.add(Priority(name = "", location = 1, count = 2, x = 0f, y = 0f))
+                        }
+                        aPriorityButtonTwo(index, prioritiesForUi)
+                    }
+
+                    3 -> listOfComposables.add { index ->
+                        if(prioritiesForUi.size == 2){
+                            prioritiesForUi.add(Priority(name = "", location = 1, count = 3, x = 0f, y = 0f))
+                        }
+                        aPriorityButtonThree(index, prioritiesForUi)
+                    }
+
+                    4 -> listOfComposables.add { index ->
+                        if(prioritiesForUi.size == 3){
+                            prioritiesForUi.add(Priority(name = "", location = 1, count = 4, x = 0f, y = 0f))
+                        }
+                        aPriorityButtonFour(index, prioritiesForUi)
+                    }
+
+                    5 -> listOfComposables.add { index ->
+                        if(prioritiesForUi.size == 4){
+                            prioritiesForUi.add(Priority(name = "", location = 1, count = 5, x = 0f, y = 0f))
+                        }
+                        aPriorityButtonFive(index, prioritiesForUi)
+                    }
+
+                    6 -> listOfComposables.add { index ->
+                        if(prioritiesForUi.size == 5){
+                            prioritiesForUi.add(Priority(name = "", location = 1, count = 6, x = 0f, y = 0f))
+                        }
+                        aPriorityButtonSix(index, prioritiesForUi)
+                    }
                 }
             }
-
-            incrament.value++
         }
-
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
