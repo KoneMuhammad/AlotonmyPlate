@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,7 +29,7 @@ import androidx.navigation.NavController
 import com.example.alotonmyplate.database.Priority
 
 @Composable
-fun ThirdScreen(navigator: NavController, PriorityListFromSSD: SnapshotStateList<Priority>) {
+fun ThirdScreen(isSave: MutableState<Boolean>,navigator: NavController, PriorityListFromSSD: SnapshotStateList<Priority>) {
 
     val listOfComposables = remember {
         mutableStateListOf<@Composable () -> Unit>()

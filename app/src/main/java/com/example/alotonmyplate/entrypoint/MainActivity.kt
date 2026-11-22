@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity(){
                 }
             }
 
-            navigationContainer(
+            navigationContainer(isSaveTrue,
                 firstScreen,
                 secondScreen,
                 thirdScreen,

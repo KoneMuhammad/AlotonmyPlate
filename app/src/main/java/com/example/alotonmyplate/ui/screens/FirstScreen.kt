@@ -3,11 +3,13 @@
 package com.example.alotonmyplate.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -30,6 +32,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.dropShadow
@@ -46,7 +49,7 @@ import com.example.alotonmyplate.ui.aPriorityButtonThree
 import com.example.alotonmyplate.ui.aPriorityButtonTwo
 import com.example.alotonmyplate.database.Priority
 @Composable
-    fun FirstScreen(navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
+    fun FirstScreen(isSave: MutableState<Boolean>, navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
 
         if(prioritiesForUi.size != 0 && prioritiesForUi.size != 1) {
             prioritiesForUi.sortBy { it.count }
@@ -131,6 +134,27 @@ contentAlignment = Alignment.Center
         {
             listOfComposables.forEachIndexed { index, content ->
                 content(index)
+            }
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth(0.25f)
+                    .fillMaxHeight(0.09f)
+                    .offset(y = maxHeight * 0.2f)
+                    .clip(shape = RoundedCornerShape(percent = 15))
+                    .clickable(onClick = {
+                        isSave.value = true
+                        isSave.value = false
+                    })
+                    .background(color =
+                    if(isSave.value ==  false){
+                        Color.Black
+                    }else {
+                        Color.Green
+                    }
+                    )
+            ) {
+
+                Text("Save")
             }
             Row(
                 modifier = Modifier
