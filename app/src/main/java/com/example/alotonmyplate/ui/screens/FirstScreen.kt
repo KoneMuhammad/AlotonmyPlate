@@ -33,6 +33,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.dropShadow
@@ -48,8 +49,16 @@ import com.example.alotonmyplate.ui.aPriorityButtonSix
 import com.example.alotonmyplate.ui.aPriorityButtonThree
 import com.example.alotonmyplate.ui.aPriorityButtonTwo
 import com.example.alotonmyplate.database.Priority
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
+
 @Composable
     fun FirstScreen(isSave: MutableState<Boolean>, navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
+
+        val hasUserClicked = remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
 
         if(prioritiesForUi.size != 0 && prioritiesForUi.size != 1) {
             prioritiesForUi.sortBy { it.count }
@@ -141,19 +150,22 @@ contentAlignment = Alignment.Center
                     .fillMaxHeight(0.09f)
                     .offset(y = maxHeight * 0.2f)
                     .clip(shape = RoundedCornerShape(percent = 15))
-                    .clickable(onClick = {
-                        isSave.value = true
-                        isSave.value = false
+                    .clickable(enabled = !hasUserClicked.value,
+                        onClick = {
+                        scope.launch {
+                                hasUserClicked.value = true
+                                delay(5.seconds)
+                                hasUserClicked.value = false
+                        }
                     })
                     .background(color =
-                    if(isSave.value ==  false){
-                        Color.Black
+                    if(hasUserClicked.value == false){
+                        Color(0xFF2EB521)
                     }else {
-                        Color.Green
+                        Color.Gray
                     }
                     )
             ) {
-
                 Text("Save")
             }
             Row(

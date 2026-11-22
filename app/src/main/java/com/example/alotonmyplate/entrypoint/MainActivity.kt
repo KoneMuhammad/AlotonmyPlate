@@ -52,6 +52,8 @@ class MainActivity : ComponentActivity(){
         lifecycleScope.launch {
             all_The_Screens_Priorities = withContext(Dispatchers.IO){ talkToDb.getAll()
             }
+            Log.i("Database", "${all_The_Screens_Priorities}")
+
             for(priority in all_The_Screens_Priorities){
                 when(priority.location){
                     1 -> firstScreenPriorityState.add(priority)
@@ -71,28 +73,29 @@ class MainActivity : ComponentActivity(){
             val thirdScreen = remember { firstScreenPriorityState }
             val fourthScreen = remember { firstScreenPriorityState }
 
-            if(isSaveTrue.value == true){
-                LaunchedEffect(Unit) {
-                    val talkBackToDatabaseArray: MutableList<Priority> = mutableListOf()
-                    firstScreen.forEach {
-                            eachone ->
-                        talkBackToDatabaseArray.add(eachone)
+                LaunchedEffect(isSaveTrue.value) {
+                    if (isSaveTrue.value) {
+                        val talkBackToDatabaseArray: MutableList<Priority> = mutableListOf()
+                        firstScreen.forEach { eachone ->
+                            talkBackToDatabaseArray.add(eachone)
+                        }
+                        secondScreen.forEach { eachone ->
+                            talkBackToDatabaseArray.add(eachone)
+                        }
+                        thirdScreen.forEach { eachone ->
+                            talkBackToDatabaseArray.add(eachone)
+                        }
+                        fourthScreen.forEach { eachone ->
+                            talkBackToDatabaseArray.add(eachone)
+                        }
+                        Log.i("Database", "${talkBackToDatabaseArray}")
+                        withContext(Dispatchers.IO) {
+                            talkToDb.updateDatabase(
+                                talkBackToDatabaseArray
+                            )
+                        }
                     }
-                    secondScreen.forEach {
-                            eachone ->
-                        talkBackToDatabaseArray.add(eachone)
-                    }
-                    thirdScreen.forEach {
-                            eachone ->
-                        talkBackToDatabaseArray.add(eachone)
-                    }
-                    fourthScreen.forEach {
-                            eachone ->
-                        talkBackToDatabaseArray.add(eachone)
-                    }
-                    withContext(Dispatchers.IO){ talkToDb.updateDatabase(talkBackToDatabaseArray)}
                 }
-            }
 
             navigationContainer(isSaveTrue,
                 firstScreen,
