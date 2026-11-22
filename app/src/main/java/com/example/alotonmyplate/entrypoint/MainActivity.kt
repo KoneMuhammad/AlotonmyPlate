@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.lifecycle.lifecycleScope
 import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.example.alotonmyplate.database.AppDatabase
@@ -19,6 +20,7 @@ import com.example.alotonmyplate.ui.screens.LocationTwoPriority
 import com.example.alotonmyplate.database.Priority
 import com.example.alotonmyplate.ui.screens.navigationContainer
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 fun store_Priority_Into_SubLists(priorityList: List<Priority>){
@@ -40,44 +42,63 @@ class MainActivity : ComponentActivity(){
             .build()
         val talkToDb = databaseTalker.PriorityFunctions()
 
+        val firstScreenPriorityState =  mutableStateListOf<Priority>()
+        val secondScreenPriorityState = mutableStateListOf<Priority>()
+        val thirdScreenPriorityState = mutableStateListOf<Priority>()
+        val fourthScreenPriorityState = mutableStateListOf<Priority>()
+
         var all_The_Screens_Priorities: List<Priority> = listOf()
 
+        lifecycleScope.launch {
+            all_The_Screens_Priorities = withContext(Dispatchers.IO){ talkToDb.getAll()
+            }
+            for(priority in all_The_Screens_Priorities){
+                when(priority.location){
+                    1 -> firstScreenPriorityState.add(priority)
+                    2 -> secondScreenPriorityState.add(priority)
+                    3 -> thirdScreenPriorityState.add(priority)
+                    4 -> fourthScreenPriorityState.add(priority)
+                }
+            }
+        }
         enableEdgeToEdge()
         setContent {
+
             val isSaveTrue = remember { mutableStateOf(false) }
 
+            val firstScreen = remember { firstScreenPriorityState }
+            val secondScreen = remember { firstScreenPriorityState }
+            val thirdScreen = remember { firstScreenPriorityState }
+            val fourthScreen = remember { firstScreenPriorityState }
 
             if(isSaveTrue.value == true){
                 LaunchedEffect(Unit) {
-                    withContext(Dispatchers.IO){ talkToDb.updateDatabase()}
-                }
-            }
-            val firstScreenPriorityState = remember { mutableStateListOf<Priority>() }
-            val secondScreenPriorityState = remember { mutableStateListOf<Priority>()}
-            val thirdScreenPriorityState = remember { mutableStateListOf<Priority>() }
-            val fourthScreenPriorityState = remember { mutableStateListOf<Priority>()}
-
-
-            LaunchedEffect(Unit) {
-                all_The_Screens_Priorities = withContext(Dispatchers.IO){ talkToDb.getAll() }
-
-                Log.i("DatabaseList", "${all_The_Screens_Priorities}")
-
-                for(priority in all_The_Screens_Priorities){
-                    when(priority.location){
-                        1 -> firstScreenPriorityState.add(priority)
-                        2 -> secondScreenPriorityState.add(priority)
-                        3 -> thirdScreenPriorityState.add(priority)
-                        4 -> fourthScreenPriorityState.add(priority)
+                    val talkBackToDatabaseArray: MutableList<Priority> = mutableListOf()
+                    firstScreen.forEach {
+                            eachone ->
+                        talkBackToDatabaseArray.add(eachone)
                     }
+                    secondScreen.forEach {
+                            eachone ->
+                        talkBackToDatabaseArray.add(eachone)
+                    }
+                    thirdScreen.forEach {
+                            eachone ->
+                        talkBackToDatabaseArray.add(eachone)
+                    }
+                    fourthScreen.forEach {
+                            eachone ->
+                        talkBackToDatabaseArray.add(eachone)
+                    }
+                    withContext(Dispatchers.IO){ talkToDb.updateDatabase(talkBackToDatabaseArray)}
                 }
             }
-            //move this to only on oncreate, then on set content
+
             navigationContainer(
-                firstScreenPriorityState,
-                secondScreenPriorityState,
-                thirdScreenPriorityState,
-                fourthScreenPriorityState
+                firstScreen,
+                secondScreen,
+                thirdScreen,
+                fourthScreen
             )
         }
     }
