@@ -69,13 +69,15 @@ class MainActivity : ComponentActivity(){
             val isSaveTrue = remember { mutableStateOf(false) }
 
             val firstScreen = remember { firstScreenPriorityState }
-            val secondScreen = remember { firstScreenPriorityState }
-            val thirdScreen = remember { firstScreenPriorityState }
-            val fourthScreen = remember { firstScreenPriorityState }
+            val secondScreen = remember { secondScreenPriorityState }
+            val thirdScreen = remember { thirdScreenPriorityState }
+            val fourthScreen = remember { fourthScreenPriorityState }
 
                 LaunchedEffect(isSaveTrue.value) {
+
                     if (isSaveTrue.value) {
                         val talkBackToDatabaseArray: MutableList<Priority> = mutableListOf()
+
                         firstScreen.forEach { eachone ->
                             talkBackToDatabaseArray.add(eachone)
                         }
@@ -88,7 +90,9 @@ class MainActivity : ComponentActivity(){
                         fourthScreen.forEach { eachone ->
                             talkBackToDatabaseArray.add(eachone)
                         }
-                        Log.i("Database", "${talkBackToDatabaseArray}")
+
+
+                        Log.i("TalkTo", "${talkBackToDatabaseArray}")
                         withContext(Dispatchers.IO) {
                             talkToDb.updateDatabase(
                                 talkBackToDatabaseArray

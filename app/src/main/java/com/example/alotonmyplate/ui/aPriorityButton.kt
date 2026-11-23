@@ -53,6 +53,7 @@ import com.example.test.fingerprint
 import com.example.test.imageVector.priority_high
 import java.util.random.RandomGenerator
 import kotlin.math.roundToInt
+import kotlin.text.get
 
 val iconContainerolors: Array<Color> = arrayOf(Color(0xFF00999F),Color(0xFFB88000),Color(0xFFA61113))
 val rowColors: Array<Color> = arrayOf(Color(0xFFC9ECED),Color(0xFFFEF2D8),Color(0xFFFDD7D8))
@@ -102,8 +103,11 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
             )
         }
     }
+    //data driven or something afterward to improve mental representaion
+    // or somethign jonathan blow or someone speaks about like data x or sean barret
 
     fun changeColor() {
+        index.value += 1
         if (index.value > 2) {
             index.value = 0
         }
@@ -112,15 +116,13 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
         currentIconColor.value = iconColors[index.value]
         currentRowBorderColor.value = rowBorderColors[index.value]
         currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
     }
     Row(
         modifier = Modifier
             .offset(
             {
-                IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
-                    y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
+                IntOffset(x = priorityarray[indexFromParent].x.roundToInt(),
+                    y = priorityarray[indexFromParent].y.roundToInt() )
             }
         )
             .dropShadow(
@@ -207,8 +209,13 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityarray[indexFromParent].x += dragAmount.x
-                    priorityarray[indexFromParent].y += dragAmount.y
+                    change.consume()
+                    val current = priorityarray[indexFromParent]
+
+                    priorityarray[indexFromParent] = current.copy(
+                        x = current.x + dragAmount.x,
+                        y = current.y + dragAmount.y
+                    )
                 }
             }
             .fillMaxWidth(1f)

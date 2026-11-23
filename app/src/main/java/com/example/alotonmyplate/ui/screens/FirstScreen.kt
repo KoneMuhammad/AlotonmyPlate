@@ -2,6 +2,7 @@
 
 package com.example.alotonmyplate.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -33,11 +34,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -49,34 +53,34 @@ import com.example.alotonmyplate.ui.aPriorityButtonSix
 import com.example.alotonmyplate.ui.aPriorityButtonThree
 import com.example.alotonmyplate.ui.aPriorityButtonTwo
 import com.example.alotonmyplate.database.Priority
+import com.example.alotonmyplate.ui.boldonse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-    fun FirstScreen(isSave: MutableState<Boolean>, navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
+    fun FirstScreen(hasUserClicked: MutableState<Boolean>, navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
 
-        val hasUserClicked = remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-
+         val scope = rememberCoroutineScope()
 
         if(prioritiesForUi.size != 0 && prioritiesForUi.size != 1) {
             prioritiesForUi.sortBy { it.count }
         }
 
-    val incrament = remember { mutableStateOf(0) }
+    val incrament = remember { mutableIntStateOf(0) }
     val isendOScreen = remember { mutableStateOf(false) }
 
     val listOfComposables = remember {
         mutableStateListOf<@Composable (index: Int) -> Unit>() }
 
         fun incramentor() {
-            if (incrament.value <= 6) {
-                incrament.value++
-                when (incrament.value) {
+            if (incrament.intValue <= 6) {
+                incrament.intValue++
+                when (incrament.intValue) {
                     1 -> listOfComposables.add { index ->
-                        if(prioritiesForUi.size == 0){
+                        if(prioritiesForUi.isEmpty()){
                             prioritiesForUi.add(Priority(name = "", location = 1, count = 1, x = 0f, y = 0f))
+                            Log.i("OnCLick", "${prioritiesForUi.size}")
                         }
                         aPriorityButtonOne(index, prioritiesForUi)
                     }
@@ -145,10 +149,12 @@ contentAlignment = Alignment.Center
                 content(index)
             }
             Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth(0.25f)
-                    .fillMaxHeight(0.09f)
-                    .offset(y = maxHeight * 0.2f)
+                    .fillMaxHeight(0.06f)
+                    .offset(y = maxHeight * 0.3f)
                     .clip(shape = RoundedCornerShape(percent = 15))
                     .clickable(enabled = !hasUserClicked.value,
                         onClick = {
@@ -166,7 +172,13 @@ contentAlignment = Alignment.Center
                     }
                     )
             ) {
-                Text("Save")
+                Text("Save",
+                    style = TextStyle
+                (fontFamily = boldonse,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Normal,
+
+                        ))
             }
             Row(
                 modifier = Modifier
