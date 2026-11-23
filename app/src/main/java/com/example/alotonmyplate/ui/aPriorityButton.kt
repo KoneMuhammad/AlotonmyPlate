@@ -231,7 +231,6 @@ fun aPriorityButtonOne(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
         }
     }
 }
-
 @Composable
 fun aPriorityButtonTwo(indexFromParent: Int, priorityarray: SnapshotStateList<Priority>){
 
@@ -268,8 +267,11 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
             )
         }
     }
+    //data driven or something afterward to improve mental representaion
+    // or somethign jonathan blow or someone speaks about like data x or sean barret
 
     fun changeColor() {
+        index.value += 1
         if (index.value > 2) {
             index.value = 0
         }
@@ -278,15 +280,13 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
         currentIconColor.value = iconColors[index.value]
         currentRowBorderColor.value = rowBorderColors[index.value]
         currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
     }
     Row(
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
-                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt(),
+                        y = priorityarray[indexFromParent].y.roundToInt() )
                 }
             )
             .dropShadow(
@@ -373,8 +373,13 @@ fun aPriorityButtonTwo(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityarray[indexFromParent].x += dragAmount.x
-                    priorityarray[indexFromParent].y += dragAmount.y
+                    change.consume()
+                    val current = priorityarray[indexFromParent]
+
+                    priorityarray[indexFromParent] = current.copy(
+                        x = current.x + dragAmount.x,
+                        y = current.y + dragAmount.y
+                    )
                 }
             }
             .fillMaxWidth(1f)
@@ -426,8 +431,11 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityarray: SnapshotStateList<
             )
         }
     }
+    //data driven or something afterward to improve mental representaion
+    // or somethign jonathan blow or someone speaks about like data x or sean barret
 
     fun changeColor() {
+        index.value += 1
         if (index.value > 2) {
             index.value = 0
         }
@@ -436,15 +444,13 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityarray: SnapshotStateList<
         currentIconColor.value = iconColors[index.value]
         currentRowBorderColor.value = rowBorderColors[index.value]
         currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
     }
     Row(
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
-                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt(),
+                        y = priorityarray[indexFromParent].y.roundToInt() )
                 }
             )
             .dropShadow(
@@ -531,8 +537,13 @@ fun aPriorityButtonThree(indexFromParent: Int, priorityarray: SnapshotStateList<
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityarray[indexFromParent].x += dragAmount.x
-                    priorityarray[indexFromParent].y += dragAmount.y
+                    change.consume()
+                    val current = priorityarray[indexFromParent]
+
+                    priorityarray[indexFromParent] = current.copy(
+                        x = current.x + dragAmount.x,
+                        y = current.y + dragAmount.y
+                    )
                 }
             }
             .fillMaxWidth(1f)
@@ -584,8 +595,11 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityarray: SnapshotStateList<P
             )
         }
     }
+    //data driven or something afterward to improve mental representaion
+    // or somethign jonathan blow or someone speaks about like data x or sean barret
 
     fun changeColor() {
+        index.value += 1
         if (index.value > 2) {
             index.value = 0
         }
@@ -594,15 +608,13 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityarray: SnapshotStateList<P
         currentIconColor.value = iconColors[index.value]
         currentRowBorderColor.value = rowBorderColors[index.value]
         currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
     }
     Row(
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
-                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt(),
+                        y = priorityarray[indexFromParent].y.roundToInt() )
                 }
             )
             .dropShadow(
@@ -689,8 +701,13 @@ fun aPriorityButtonFour(indexFromParent: Int, priorityarray: SnapshotStateList<P
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityarray[indexFromParent].x += dragAmount.x
-                    priorityarray[indexFromParent].y += dragAmount.y
+                    change.consume()
+                    val current = priorityarray[indexFromParent]
+
+                    priorityarray[indexFromParent] = current.copy(
+                        x = current.x + dragAmount.x,
+                        y = current.y + dragAmount.y
+                    )
                 }
             }
             .fillMaxWidth(1f)
@@ -742,8 +759,11 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityarray: SnapshotStateList<P
             )
         }
     }
+    //data driven or something afterward to improve mental representaion
+    // or somethign jonathan blow or someone speaks about like data x or sean barret
 
     fun changeColor() {
+        index.value += 1
         if (index.value > 2) {
             index.value = 0
         }
@@ -752,15 +772,13 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityarray: SnapshotStateList<P
         currentIconColor.value = iconColors[index.value]
         currentRowBorderColor.value = rowBorderColors[index.value]
         currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
     }
     Row(
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
-                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt(),
+                        y = priorityarray[indexFromParent].y.roundToInt() )
                 }
             )
             .dropShadow(
@@ -847,8 +865,13 @@ fun aPriorityButtonFive(indexFromParent: Int, priorityarray: SnapshotStateList<P
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityarray[indexFromParent].x += dragAmount.x
-                    priorityarray[indexFromParent].y += dragAmount.y
+                    change.consume()
+                    val current = priorityarray[indexFromParent]
+
+                    priorityarray[indexFromParent] = current.copy(
+                        x = current.x + dragAmount.x,
+                        y = current.y + dragAmount.y
+                    )
                 }
             }
             .fillMaxWidth(1f)
@@ -900,8 +923,11 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
             )
         }
     }
+    //data driven or something afterward to improve mental representaion
+    // or somethign jonathan blow or someone speaks about like data x or sean barret
 
     fun changeColor() {
+        index.value += 1
         if (index.value > 2) {
             index.value = 0
         }
@@ -910,15 +936,13 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
         currentIconColor.value = iconColors[index.value]
         currentRowBorderColor.value = rowBorderColors[index.value]
         currentShadowColor.value = ShadowColors[index.value]
-
-        index.value += 1
     }
     Row(
         modifier = Modifier
             .offset(
                 {
-                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt() ?: 0,
-                        y = priorityarray[indexFromParent].y.roundToInt() ?: 0)
+                    IntOffset(x = priorityarray[indexFromParent].x.roundToInt(),
+                        y = priorityarray[indexFromParent].y.roundToInt() )
                 }
             )
             .dropShadow(
@@ -1005,8 +1029,13 @@ fun aPriorityButtonSix(indexFromParent: Int, priorityarray: SnapshotStateList<Pr
                     onDragEnd = {isShadowElevation.value = false}
                 ) {
                         change, dragAmount ->
-                    priorityarray[indexFromParent].x += dragAmount.x
-                    priorityarray[indexFromParent].y += dragAmount.y
+                    change.consume()
+                    val current = priorityarray[indexFromParent]
+
+                    priorityarray[indexFromParent] = current.copy(
+                        x = current.x + dragAmount.x,
+                        y = current.y + dragAmount.y
+                    )
                 }
             }
             .fillMaxWidth(1f)

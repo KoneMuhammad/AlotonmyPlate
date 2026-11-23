@@ -206,46 +206,14 @@ contentAlignment = Alignment.Center
         }
     }
 
-@Preview
-@Composable
-fun checkButton(){
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFFB7D5CA))
-            .combinedClickable(
-                interactionSource = null,
-                indication = null,
-                onClick = { }
-            ),
-        contentAlignment = Alignment.Center
-    ){
-        Button(modifier = Modifier
-            .size(80.dp)
-            .dropShadow(shape = CircleShape,
-                shadow = Shadow(
-                radius = 7.dp,
-                offset = DpOffset(x = 0.dp,y= 10.dp),
-                color = Color(0xFF98C3B3),
-            )),
-            contentPadding = PaddingValues(0.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF00999F)
-            ),
-            onClick = { }
-        ) {
-            Text(modifier = Modifier.fillMaxWidth(),
-                text =  "rename",
-                textAlign = TextAlign.Center,
-                fontSize = 17.sp
-                )
-        }
-        }
-}
-
-
-
-
+//color
+/**
+ * second screen bg Color(0xFFD3D8B6)| green Color(0xFF1FC011)
+ * third screen bg  Color(0xFFBCB6D8)| green Color(0xFF28A51D)
+ * fourth screen bg Color(0xFFB6D8D4)|green Color(0xFF24881B)
+ */
+//index
+//store all colors here
 
 
 
