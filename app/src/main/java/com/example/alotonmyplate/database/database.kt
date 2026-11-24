@@ -8,19 +8,32 @@ import androidx.room3.Entity
 import androidx.room3.PrimaryKey
 import androidx.room3.Query
 import androidx.room3.RoomDatabase
-import androidx.room3.Update
 import androidx.room3.Upsert
 
 @Entity
 data class Priority(
         @PrimaryKey(autoGenerate = true)
         val uid: Int = 0,
-        @ColumnInfo(name = "name") var name: String,
-        @ColumnInfo(name = "location") val location: Int,
-        @ColumnInfo(name = "count") val count: Int,
-        @ColumnInfo(name = "x") var x: Float,
-        @ColumnInfo(name = "y") var y: Float,
+
+        @ColumnInfo(name = "name")
+        var name: String,
+
+        @ColumnInfo(name = "location")
+        val location: Int,
+
+        @ColumnInfo(name = "count")
+        val count: Int,
+
+        @ColumnInfo(name = "x")
+        var x: Float,
+
+        @ColumnInfo(name = "y")
+        var y: Float,
+
+        @ColumnInfo(name = "colorIndex", defaultValue = "0")
+        val colorIndex: Int = 0
 )
+
 @Dao
 interface PriorityFunctions {
         @Query("SELECT * FROM Priority")
@@ -36,7 +49,10 @@ interface PriorityFunctions {
         suspend fun delete(priorities: List<Priority>)
 }
 
-@Database(entities = [Priority::class], version = 3)
+@Database(
+        entities = [Priority::class],
+        version = 4
+)
 abstract class AppDatabase : RoomDatabase() {
         abstract fun PriorityFunctions(): PriorityFunctions
 }

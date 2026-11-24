@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.alotonmyplate.database.Priority
@@ -45,149 +47,159 @@ import com.example.alotonmyplate.ui.aPriorityButtonTwo
 import com.example.alotonmyplate.ui.boldonse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun ThirdScreen(hasUserClicked: MutableState<Boolean>, navigator: NavController, prioritiesForUi: SnapshotStateList<Priority>) {
-
+fun ThirdScreen(
+    hasUserClicked: MutableState<Boolean>,
+    navigator: NavController,
+    prioritiesForUi: SnapshotStateList<Priority>
+) {
     val scope = rememberCoroutineScope()
 
-    if(prioritiesForUi.size != 0 && prioritiesForUi.size != 1) {
-        prioritiesForUi.sortBy { it.count }
+    fun addPriority() {
+        if (prioritiesForUi.size >= 6) return
+
+        val nextCount =
+            (prioritiesForUi.maxOfOrNull { it.count } ?: 0) + 1
+
+        prioritiesForUi.add(
+            Priority(
+                name = "",
+                location = 3,
+                count = nextCount,
+                x = 0f,
+                y = 0f
+            )
+        )
     }
 
-    val incrament = remember { mutableIntStateOf(0) }
-    val isendOScreen = remember { mutableStateOf(false) }
-
-    val listOfComposables = remember {
-        mutableStateListOf<@Composable (index: Int) -> Unit>() }
-
-    fun incramentor() {
-        if (incrament.intValue <= 6) {
-            incrament.intValue++
-            when (incrament.intValue) {
-                1 -> listOfComposables.add { index ->
-                    if(prioritiesForUi.isEmpty()){
-                        prioritiesForUi.add(Priority(name = "", location = 1, count = 1, x = 0f, y = 0f))
-                        Log.i("OnCLick", "${prioritiesForUi.size}")
-                    }
-                    aPriorityButtonOne(index, prioritiesForUi)
-                }
-
-                2 -> listOfComposables.add { index ->
-                    if(prioritiesForUi.size == 1){
-                        prioritiesForUi.add(Priority(name = "", location = 3, count = 2, x = 0f, y = 0f))
-                    }
-                    aPriorityButtonTwo(index, prioritiesForUi)
-                }
-
-                3 -> listOfComposables.add { index ->
-                    if(prioritiesForUi.size == 2){
-                        prioritiesForUi.add(Priority(name = "", location = 3, count = 3, x = 0f, y = 0f))
-                    }
-                    aPriorityButtonThree(index, prioritiesForUi)
-                }
-
-                4 -> listOfComposables.add { index ->
-                    if(prioritiesForUi.size == 3){
-                        prioritiesForUi.add(Priority(name = "", location = 3, count = 4, x = 0f, y = 0f))
-                    }
-                    aPriorityButtonFour(index, prioritiesForUi)
-                }
-
-                5 -> listOfComposables.add { index ->
-                    if(prioritiesForUi.size == 4){
-                        prioritiesForUi.add(Priority(name = "", location = 3, count = 5, x = 0f, y = 0f))
-                    }
-                    aPriorityButtonFive(index, prioritiesForUi)
-                }
-
-                6 -> listOfComposables.add { index ->
-                    if(prioritiesForUi.size == 5){
-                        prioritiesForUi.add(Priority(name = "", location = 3, count = 6, x = 0f, y = 0f))
-                    }
-                    aPriorityButtonSix(index, prioritiesForUi)
-                }
-            }
-        }
-    }
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFFBCB6D8))
-            .pointerInput(Unit) {
-                detectHorizontalDragGestures { change, dragAmount ->
-                    if (dragAmount < 0) {
+            .background(Color(0xFFB7D5CA))
+            .pointerInput(navigator) {
+                val minSwipeDistance = 80.dp.toPx()
+                val horizontalDominance = 1.5f
 
-                        navigator.navigate(secondScreen)
-                    } else {
-                        isendOScreen.value = true
+                var totalX = 0f
+                var totalY = 0f
+
+                detectDragGestures(
+                    onDragStart = {
+                        totalX = 0f
+                        totalY = 0f
+                    },
+                    onDrag = { _, dragAmount ->
+                        totalX += dragAmount.x
+                        totalY += dragAmount.y
+                    },
+                    onDragEnd = {
+                        val isHorizontalSwipe =
+                            abs(totalX) >= minSwipeDistance &&
+                                    abs(totalX) >
+                                    abs(totalY) * horizontalDominance
+                        if (isHorizontalSwipe) {
+                            if (totalX > 0f) {
+                                navigator.navigateKeepingState(secondScreen)
+                            } else {
+                                navigator.navigateKeepingState(fourthScreen)
+                            }
+                        }
+
+                        totalX = 0f
+                        totalY = 0f
+                    },
+                    onDragCancel = {
+                        totalX = 0f
+                        totalY = 0f
                     }
-                }
+                )
             }
             .combinedClickable(
-                onDoubleClick = { incramentor() },
+                onDoubleClick = { addPriority() },
                 interactionSource = null,
                 indication = null,
-                onClick = { }
+                onClick = {}
             ),
         contentAlignment = Alignment.Center
-    )
-    {
-        listOfComposables.forEachIndexed { index, content ->
-            content(index)
+    ) {
+        // Sort the display order without modifying the list
+        // during composition. Each button gets the actual list index.
+        val orderedIndices = prioritiesForUi.indices
+            .sortedBy { prioritiesForUi[it].count }
+            .take(6)
+
+        orderedIndices.forEachIndexed { buttonNumber, listIndex ->
+            when (buttonNumber) {
+                0 -> aPriorityButtonOne(listIndex, prioritiesForUi)
+                1 -> aPriorityButtonTwo(listIndex, prioritiesForUi)
+                2 -> aPriorityButtonThree(listIndex, prioritiesForUi)
+                3 -> aPriorityButtonFour(listIndex, prioritiesForUi)
+                4 -> aPriorityButtonFive(listIndex, prioritiesForUi)
+                5 -> aPriorityButtonSix(listIndex, prioritiesForUi)
+            }
         }
-        Column (
+
+        Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth(0.25f)
                 .fillMaxHeight(0.06f)
                 .offset(y = maxHeight * 0.3f)
-                .clip(shape = RoundedCornerShape(percent = 15))
-                .clickable(enabled = !hasUserClicked.value,
+                .clip(RoundedCornerShape(percent = 15))
+                .clickable(
+                    enabled = !hasUserClicked.value,
                     onClick = {
                         scope.launch {
                             hasUserClicked.value = true
-                            delay(5.seconds)
+                            delay(5_000L)
                             hasUserClicked.value = false
                         }
-                    })
-                .background(color =
-                    if(hasUserClicked.value == false){
+                    }
+                )
+                .background(
+                    if (!hasUserClicked.value) {
                         Color(0xFF2EB521)
-                    }else {
+                    } else {
                         Color.Gray
                     }
                 )
         ) {
-            Text("Save",
-                style = TextStyle
-                    (fontFamily = boldonse,
+            Text(
+                text = "Save",
+                style = TextStyle(
+                    fontFamily = boldonse,
                     fontSize = 10.sp,
-                    fontWeight = FontWeight.Normal,
-
-                    ))
+                    fontWeight = FontWeight.Normal
+                )
+            )
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth(0.43f)
                 .fillMaxHeight(0.03f)
                 .offset(y = maxHeight * 0.4f)
-                .clip(shape = RoundedCornerShape(percent = 50))
-                .background(color = Color.Transparent),
+                .clip(RoundedCornerShape(percent = 50))
+                .background(Color.Transparent),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
-
         ) {
             repeat(4) { index ->
                 Box(
                     modifier = Modifier
                         .fillMaxHeight(0.5f)
                         .fillMaxWidth(0.1f)
-                        .clip(shape = CircleShape)
+                        .clip(CircleShape)
                         .background(
-                            if (index == 0) Color(0xFF28A51D) else Color.Black
+                            if (index == 2) {
+                                Color(0xFF2EB521)
+                            } else {
+                                Color.Black
+                            }
                         )
                 )
             }

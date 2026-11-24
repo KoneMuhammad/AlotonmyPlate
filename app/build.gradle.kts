@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.alotonmyplate"
+    namespace = "com.hatspoon.emportantdo"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.alotonmyplate"
+        applicationId = "com.hatspoon.emportantdo"
         minSdk = 24
         targetSdk = 37
         versionCode = 1

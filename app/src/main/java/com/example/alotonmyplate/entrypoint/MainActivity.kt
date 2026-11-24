@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.lifecycleScope
 import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
@@ -66,7 +67,7 @@ class MainActivity : ComponentActivity(){
         enableEdgeToEdge()
         setContent {
 
-            val isSaveTrue = remember { mutableStateOf(false) }
+            val isSaveTrue = rememberSaveable { mutableStateOf(false) }
 
             val firstScreen = remember { firstScreenPriorityState }
             val secondScreen = remember { secondScreenPriorityState }
