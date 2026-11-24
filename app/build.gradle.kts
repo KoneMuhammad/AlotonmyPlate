@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    namespace = "com.hatspoon.emportantdo"
+    namespace = "com.hatspoon.importantnow"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.hatspoon.emportantdo"
+        applicationId = "com.hatspoon.importantnow"
         minSdk = 24
         targetSdk = 37
         versionCode = 1

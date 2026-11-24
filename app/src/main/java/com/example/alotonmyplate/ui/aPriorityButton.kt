@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.alotonmyplate.R
+import com.hatspoon.importantnow.R
 import com.example.alotonmyplate.database.Priority
 import com.example.test.fingerprint
 import com.example.test.imageVector.priority_high
@@ -94,7 +94,7 @@ fun aPriorityButtonOne(
         }
 
     val fontSize = (
-            (16 downTo 11).firstOrNull { size ->
+            (16 downTo 13).firstOrNull { size ->
                 val result = textMeasurer.measure(
                     text = AnnotatedString(text),
                     style = TextStyle(
@@ -108,7 +108,7 @@ fun aPriorityButtonOne(
                 )
 
                 !result.hasVisualOverflow
-            } ?: 11
+            } ?: 13
             ).sp
 
     val shadow = if (isShadowElevation) {
@@ -203,7 +203,7 @@ fun aPriorityButtonOne(
                 fontFamily = boldonse,
                 fontWeight = FontWeight.Normal,
                 fontSize = fontSize,
-                lineHeight = 14.sp
+                lineHeight = 16.sp
             )
         )
 

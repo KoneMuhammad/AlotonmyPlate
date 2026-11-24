@@ -1,4 +1,4 @@
-package com.example.alotonmyplate.entrypoint
+package com.hatspoon.importantnow.entrypoint
 
 import android.os.Bundle
 import android.util.Log
@@ -24,16 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-fun store_Priority_Into_SubLists(priorityList: List<Priority>){
-    for (priority in priorityList){
-        when (priority.location){
-            1 -> LocationOnePriority.add(priority)
-            2 -> LocationTwoPriority.add(priority)
-            3 -> LocationThreePriority.add(priority)
-            4 -> LocationFourPriority.add(priority)
-        }
-    }
-}
 class MainActivity : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
