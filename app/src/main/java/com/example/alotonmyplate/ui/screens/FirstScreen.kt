@@ -206,14 +206,6 @@ contentAlignment = Alignment.Center
         }
     }
 
-//color
-/**
- * second screen bg Color(0xFFD3D8B6)| green Color(0xFF1FC011)
- * third screen bg  Color(0xFFBCB6D8)| green Color(0xFF28A51D)
- * fourth screen bg Color(0xFFB6D8D4)|green Color(0xFF24881B)
- */
-//index
-//store all colors here
 
 
 
