@@ -1,9 +1,9 @@
 
-![Important Now](images/important-now-feature-icon.png)
+![Important Now](fastlane/metadata/com.hatspoon.importantnow/en-US/images/featureGraphic.png)
 # Important Now
 Yep, another CRUD app.
  
-an Android app that shows **things you have to do** and their **priority levels**.
+aan Android app that shows **things you have to do** and their **priority levels**.
 
 ## Tech
 
@@ -12,7 +12,7 @@ an Android app that shows **things you have to do** and their **priority levels*
 - Android SDK
 - Room Database(SQL)
 
-![Important Now](images/important-now-image-three.png)
+![Important Now](fastlane/metadata/com.hatspoon.importantnow/en-US/images/phoneScreenshots/1.png)
 ## License
 This is free and unencumbered software released into the public domain.
 
