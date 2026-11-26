@@ -1,9 +1,9 @@
 
 ![Important Now](fastlane/metadata/com.hatspoon.importantnow/en-US/images/featureGraphic.png)
 # Important Now
-Yep, another CRUD app.
- 
-aan Android app that shows **things you have to do** and their **priority levels**.
+
+You have many tasks, so keep track of them with Important Now
+Yep another CRUD app
 
 ## Tech
 
