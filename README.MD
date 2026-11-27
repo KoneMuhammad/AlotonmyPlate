@@ -1,5 +1,5 @@
 
-![Important Now](fastlane/metadata/com.hatspoon.importantnow/en-US/images/featureGraphic.png)
+![Important Now](fastlane/metadata/android/en-US/images/featureGraphic.png)
 # Important Now
 
 You have many tasks, so keep track of them with Important Now
@@ -12,7 +12,7 @@ Yep another CRUD app
 - Android SDK
 - Room Database(SQL)
 
-![Important Now](fastlane/metadata/com.hatspoon.importantnow/en-US/images/phoneScreenshots/1.png)
+![Important Now](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
 ## License
 This is free and unencumbered software released into the public domain.
 
